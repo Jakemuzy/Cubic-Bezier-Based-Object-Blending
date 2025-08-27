@@ -37,7 +37,7 @@ int main(void)
         glClearColor(0.1f, 0.2f, 0.2f, 1.0f);
         renderer.ClearBuffer({GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT});
 
-        /*
+        
         renderer.UseShader("BlockShader");
         glm::mat4 view = cam.GetViewMatrix();
 
@@ -51,10 +51,10 @@ int main(void)
 
         /*
             DataContext.UpdateFrame();
-        
+        */
 
         renderer.Update();
-        */
+        
     }
 
     return 0;

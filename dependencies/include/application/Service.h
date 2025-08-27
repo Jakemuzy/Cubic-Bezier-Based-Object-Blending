@@ -6,8 +6,11 @@ class Service
 {
 private:
 public:
+    bool initalized = true;
+
     Service() {}
     // Service* GetService() { return this; }
+    
 };
 
 #endif

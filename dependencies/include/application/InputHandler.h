@@ -11,13 +11,14 @@
     Singleton to handle all the user input 
 */
 
-class InputHandler
+class InputHandler : Service
 {
 private:
     GLFWwindow *window;
     std::vector<Event> KeyboardFunctions;
     std::vector<Event> MouseFunctions;
 public:
+    InputHandler() { initalized = false; }   //  Make these processes error if trying to use while not inialized
     InputHandler(GLFWwindow *_window) : window(_window) { }
 
     void AttachKeyboardProcess(Event _function);

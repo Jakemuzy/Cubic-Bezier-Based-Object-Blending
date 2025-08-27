@@ -43,6 +43,7 @@ public:
     float MouseSensitivity;
     float Zoom;
 
+    Camera() { initalized = false; }    //  Throw error if unitalized
     Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch);
     Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch);
 

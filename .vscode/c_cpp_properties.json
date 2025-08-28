@@ -9,10 +9,9 @@
                 "C:/Program Files (x86)/Windows Kits/10/Lib/10.0.22621.0/um/x86",
                 "${workspaceFolder}/dependencies/include",
                 "${workspaceFolder}/dependencies/include/imgui",
-                "${workspaceFolder}/dependencies/include/minecraft",
+                "${workspaceFolder}/dependencies/include/services",
                 "${workspaceFolder}/dependencies/include/application",
-                "${workspaceFolder}/dependencies/include/glhelper",
-                "${workspaceFolder}/dependencies/include/adapters"
+                "${workspaceFolder}/dependencies/include/glhelper"
             ],
             "defines": [
                 "_DEBUG",

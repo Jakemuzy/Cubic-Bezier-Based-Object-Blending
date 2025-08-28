@@ -44,7 +44,7 @@ public:
     std::vector<unsigned int> indices;
     std::vector<Texture> textures;
 
-    Mesh(std::vector<Vertex> _vertices, std::vector<unsigned int> _indices, std::vector<Texture> _textures);
+    Mesh(std::vecVertextor<> _vertices, std::vector<unsigned int> _indices, std::vector<Texture> _textures);
     void Draw(Shader &shader);
 };
 
@@ -61,6 +61,7 @@ private:
     std::vector<Texture> LoadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName);
 public:
     Model(char *path, std::string objName) { LoadModel(path, objName); }
+    std::vector<Mesh> GetMeshes() { return meshes; }
     void Draw(Shader &shader);
 };
 

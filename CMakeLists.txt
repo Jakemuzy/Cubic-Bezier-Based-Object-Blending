@@ -38,6 +38,7 @@ target_include_directories(
     ObjectBlend
     PRIVATE 
         ${PROJECT_SOURCE_DIR}/dependencies/include
+        ${PROJECT_SOURCE_DIR}/dependencies/include/services
         ${PROJECT_SOURCE_DIR}/dependencies/include/application
         ${PROJECT_SOURCE_DIR}/dependencies/include/glhelper
 )

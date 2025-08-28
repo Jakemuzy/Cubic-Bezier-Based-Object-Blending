@@ -82,6 +82,7 @@ public:
         std::get<0>(services) = std::make_unique<GraphicsRenderer>();
         std::get<1>(services) = std::make_unique<InputHandler>(std::get<0>(services)->GetWindow());
         std::get<2>(services) = std::make_unique<Camera>(glm::vec3(0, 0, 4), glm::vec3(0, 1, 0), -90.0f, 0.0f);
+        //  Maybe camera isn't a service, but a part of the application?
 
         InitInputProcesses();
     }

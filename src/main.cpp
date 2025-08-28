@@ -18,6 +18,7 @@ int main(void)
     //Model treestump("C:\\Users\\jmuzy\\OneDrive\\Desktop\\Projects\\Object Blending\\chopping-log", "\\chopping-log.glb");
 
     renderer.AttachShader("dependencies\\shaders\\Block.vert", "dependencies\\shaders\\Block.frag", "BlockShader");
+    renderer.AttachShader("dependencies\\shaders\\Octree.vert", "dependencies\\shaders\\Octree.frag", "OctreeShader");
 
     glm::mat4 backpackModel = glm::mat4(1.0f);
     glm::mat4 treestumpModel = glm::mat4(1.0f);

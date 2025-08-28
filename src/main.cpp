@@ -18,6 +18,7 @@ int main(void)
     //Model treestump("C:\\Users\\jmuzy\\OneDrive\\Desktop\\Projects\\Object Blending\\chopping-log", "\\chopping-log.glb");
 
     renderer.AttachShader("dependencies\\shaders\\Block.vert", "dependencies\\shaders\\Block.frag", "BlockShader");
+    renderer.AttachShader("dependencies\\shaders\\Octree.vert", "dependencies\\shaders\\Octree.frag", "OctreeShader");
 
     glm::mat4 backpackModel = glm::mat4(1.0f);
     glm::mat4 treestumpModel = glm::mat4(1.0f);
@@ -37,7 +38,7 @@ int main(void)
         glClearColor(0.1f, 0.2f, 0.2f, 1.0f);
         renderer.ClearBuffer({GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT});
 
-        /*
+        
         renderer.UseShader("BlockShader");
         glm::mat4 view = cam.GetViewMatrix();
 
@@ -51,10 +52,10 @@ int main(void)
 
         /*
             DataContext.UpdateFrame();
-        
+        */
 
         renderer.Update();
-        */
+        
     }
 
     return 0;

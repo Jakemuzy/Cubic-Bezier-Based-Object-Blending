@@ -74,10 +74,37 @@ void Mesh::Draw(Shader &shader)
     glActiveTexture(GL_TEXTURE0);
 }
 
+Model::Model(char *path, std::string objName)
+{
+    LoadModel(path, objName);
+
+    //  Get All Models Vertices
+    size_t total = 0;
+    for (const auto &mesh : meshes)
+        total += mesh.vertices.size();
+    vertexPositions.reserve(total);
+
+    for (const auto &mesh : meshes)
+    {
+        for (const auto &vertex : mesh.vertices)
+        {
+            vertexPositions.emplace_back(vertex.Position);
+        }
+    }
+
+    //  Create Octree
+    octree = std::make_unique<Octree>(vertexPositions);
+}
+
 void Model::Draw(Shader &shader)
 {
     for (unsigned int i = 0; i < meshes.size(); i++)
         meshes[i].Draw(shader);
+}
+
+std::vector<glm::vec3> Model::GetVertices()
+{
+    return vertexPositions;
 }
 
 void Model::LoadModel(std::string path, std::string objName)

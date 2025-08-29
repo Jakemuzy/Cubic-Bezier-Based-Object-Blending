@@ -47,6 +47,9 @@ public:
     //  ie.) GL_COLOR_BUFFER_BIT...
     void ClearBuffer(std::initializer_list <GLbitfield> buffers);
 
+    //  Send events that'll trigger draw
+    void Draw();
+
     //  Per frame code 
     void Update();
 

@@ -19,18 +19,19 @@ link_directories(${PROJECT_SOURCE_DIR}/dependencies/libs)
 add_executable( ObjectBlend ${SOURCES} )
 
 add_library(imgui 
-    ${PROJECT_SOURCE_DIR}/dependencies/include/imgui/imgui.cpp 
-    ${PROJECT_SOURCE_DIR}/dependencies/include/imgui/imgui_draw.cpp 
-    ${PROJECT_SOURCE_DIR}/dependencies/include/imgui/imgui_tables.cpp 
-    ${PROJECT_SOURCE_DIR}/dependencies/include/imgui/imgui_widgets.cpp 
-    ${PROJECT_SOURCE_DIR}/dependencies/include/imgui/imgui_impl_opengl3.cpp 
-    ${PROJECT_SOURCE_DIR}/dependencies/include/imgui/imgui_impl_glfw.cpp
+    ${PROJECT_SOURCE_DIR}/dependencies/include/external/imgui/imgui.cpp 
+    ${PROJECT_SOURCE_DIR}/dependencies/include/external/imgui/imgui_draw.cpp 
+    ${PROJECT_SOURCE_DIR}/dependencies/include/external/imgui/imgui_tables.cpp 
+    ${PROJECT_SOURCE_DIR}/dependencies/include/external/imgui/imgui_widgets.cpp 
+    ${PROJECT_SOURCE_DIR}/dependencies/include/external/imgui/imgui_impl_opengl3.cpp 
+    ${PROJECT_SOURCE_DIR}/dependencies/include/external/imgui/imgui_impl_glfw.cpp
 )
 
 target_include_directories(
     imgui 
     PUBLIC
-        ${PROJECT_SOURCE_DIR}/dependencies/include/imgui
+        ${PROJECT_SOURCE_DIR}/dependencies/include/external/imgui
+        ${PROJECT_SOURCE_DIR}/dependencies/include/external
         ${PROJECT_SOURCE_DIR}/dependencies/include
 )
 
@@ -41,6 +42,8 @@ target_include_directories(
         ${PROJECT_SOURCE_DIR}/dependencies/include/services
         ${PROJECT_SOURCE_DIR}/dependencies/include/application
         ${PROJECT_SOURCE_DIR}/dependencies/include/glhelper
+        ${PROJECT_SOURCE_DIR}/dependencies/include/external
+
 )
 
 target_link_libraries(
@@ -51,10 +54,4 @@ target_link_libraries(
         imgui
         ${PROJECT_SOURCE_DIR}/dependencies/libs/assimp-vc143-mtd.lib
 )
-
-
-
-
-
-
 

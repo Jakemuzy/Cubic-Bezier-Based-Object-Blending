@@ -16,6 +16,9 @@
     <ClCompile Include="C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\src\Model.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\src\Octree.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\src\Shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

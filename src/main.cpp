@@ -47,10 +47,14 @@ int main(void)
         renderer.GetShader("BlockShader").SetMat4("projection", projection);
         backpack.Draw(renderer.GetShader("BlockShader"));
 
+        //  Change this later
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         renderer.UseShader("OctreeShader");
         renderer.GetShader("OctreeShader").SetMat4("model", backpackModel);
         renderer.GetShader("OctreeShader").SetMat4("view", view);
         renderer.GetShader("OctreeShader").SetMat4("projection", projection);
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
         //  Backpack.octree.draw(;)
 
         /*

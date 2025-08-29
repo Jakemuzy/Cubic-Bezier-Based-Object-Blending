@@ -47,8 +47,13 @@ public:
     //  ie.) GL_COLOR_BUFFER_BIT...
     void ClearBuffer(std::initializer_list <GLbitfield> buffers);
 
+    
+
     //  Send events that'll trigger draw
     void Draw();
+    //  Send event that will generate VAO, VBO, etc
+    void GenerateVAO();
+    void GenerateVAOEBO();
 
     //  Per frame code 
     void Update();

@@ -47,8 +47,11 @@ int main(void)
         renderer.GetShader("BlockShader").SetMat4("projection", projection);
         backpack.Draw(renderer.GetShader("BlockShader"));
 
-        renderer.GetShader("BlockShader").SetMat4("model", treestumpModel);
-        //treestump.Draw(renderer.GetShader("BlockShader"));
+        renderer.UseShader("OctreeShader");
+        renderer.GetShader("OctreeShader").SetMat4("model", backpackModel);
+        renderer.GetShader("OctreeShader").SetMat4("view", view);
+        renderer.GetShader("OctreeShader").SetMat4("projection", projection);
+        //  Backpack.octree.draw(;)
 
         /*
             DataContext.UpdateFrame();

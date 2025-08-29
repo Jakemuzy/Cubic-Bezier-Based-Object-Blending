@@ -4,6 +4,8 @@
 #include <glm/glm.hpp>
 
 #include "Shader.h"
+#include "Octree.h"
+
 #include <stb_image.h>
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -44,13 +46,16 @@ public:
     std::vector<unsigned int> indices;
     std::vector<Texture> textures;
 
-    Mesh(std::vecVertextor<> _vertices, std::vector<unsigned int> _indices, std::vector<Texture> _textures);
+    Mesh(std::vector<Vertex> _vertices, std::vector<unsigned int> _indices, std::vector<Texture> _textures);
     void Draw(Shader &shader);
 };
 
 class Model
 {
 private:
+    std::unique_ptr<Octree> octree = nullptr;
+
+    std::vector<glm::vec3> vertexPositions;
     std::vector<Texture> textures_loaded; 
     std::vector<Mesh> meshes;
     std::string directory;
@@ -60,9 +65,11 @@ private:
     Mesh ProcessMesh(aiMesh *mesh, const aiScene *scene);
     std::vector<Texture> LoadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName);
 public:
-    Model(char *path, std::string objName) { LoadModel(path, objName); }
+    Model(char *path, std::string objName);
     std::vector<Mesh> GetMeshes() { return meshes; }
+    std::vector<glm::vec3> GetVertices();
     void Draw(Shader &shader);
+
 };
 
 

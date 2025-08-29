@@ -1,12 +1,12 @@
 #include "Octree.h"
 
 //  Only supports 8 for now
-void Node::DetermineChildren(BoundingBox _bounds, int _childrenCount)
+void Node::DetermineChildren(BoundingBox _bounds, int treeLevel)
 {
     // Currently only support octree (8 children)
-    if (_childrenCount != 3)
+    if (treeLevel >= maxTreeDepth)
     {
-        throw std::runtime_error("DetermineChildren only supports 3D octree (8 children)");
+        return;
     }
 
     float midX = (_bounds.min.x + _bounds.max.x) * 0.5f;
@@ -53,36 +53,34 @@ void Node::DetermineChildren(BoundingBox _bounds, int _childrenCount)
     node8.min = {midX, midY, midZ};
     node8.max = _bounds.max;
 
-    // Store them somewhere (assuming you have a vector<Node> children)
+    currentDepth++;
+
     children.resize(8);
-    children = { node1, node2, node3, node4, node5, node6, node7, node8 };
+    children = {Node(node1, currentDepth), Node(node2, currentDepth), Node(node3, currentDepth), Node(node4, currentDepth), Node(node5, currentDepth), Node(node6, currentDepth), Node(node7, currentDepth), Node(node8, currentDepth)};
 }
 
-Octree::Octree(Model model)
+Octree::Octree(std::vector<glm::vec3> _modelVertices) : modelVertices(_modelVertices)
 {
+    
+    //  Generate Bounding Box
     float xMin = FLT_MIN, xMax = FLT_MAX, yMin = FLT_MIN, yMax = FLT_MAX, zMin = FLT_MIN, zMax = FLT_MAX;
 
-    for (auto &mesh : model.GetMeshes())
+    for (auto &pos : modelVertices)
     {
-        for (auto &vertex : mesh.vertices)
-        {
-            glm::vec3 pos = vertex.Position;
+        if (pos.x < xMin)
+            xMin = pos.x;
+        else if (pos.x > xMax)
+            xMax = pos.x;
 
-            if (pos.x < xMin)
-                xMin = pos.x;
-            else if (pos.x > xMax)
-                xMax = pos.x;
+        if (pos.y < yMin)
+            yMin = pos.y;
+        else if (pos.y > yMax)
+            yMax = pos.y;
 
-            if (pos.y < yMin)
-                yMin = pos.y;
-            else if (pos.y > yMax)
-                yMax = pos.y;
-
-            if (pos.z < zMin)
-                zMin = pos.z;
-            else if (pos.z > zMax)
-                zMax = pos.z;
-        }
+        if (pos.z < zMin)
+            zMin = pos.z;
+        else if (pos.z > zMax)
+            zMax = pos.z;
     }
     
     bounds.min = glm::vec3(xMin, yMin, zMin);

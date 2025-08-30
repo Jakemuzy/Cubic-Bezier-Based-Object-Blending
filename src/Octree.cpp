@@ -56,7 +56,16 @@ void Node::DetermineChildren(BoundingBox _bounds, int treeLevel)
     currentDepth++;
 
     children.resize(8);
-    children = {Node(node1, currentDepth), Node(node2, currentDepth), Node(node3, currentDepth), Node(node4, currentDepth), Node(node5, currentDepth), Node(node6, currentDepth), Node(node7, currentDepth), Node(node8, currentDepth)};
+    children = {
+        new Node(node1, currentDepth), 
+        new Node(node2, currentDepth), 
+        new Node(node3, currentDepth), 
+        new Node(node4, currentDepth), 
+        new Node(node5, currentDepth), 
+        new Node(node6, currentDepth), 
+        new Node(node7, currentDepth), 
+        new Node(node8, currentDepth)
+    };
 }
 
 Octree::Octree(std::vector<glm::vec3> _modelVertices) : modelVertices(_modelVertices)
@@ -88,4 +97,19 @@ Octree::Octree(std::vector<glm::vec3> _modelVertices) : modelVertices(_modelVert
 
     //  Divide the space into 3 slices, (2^3 = 8 children)
     DetermineChildren(bounds, 3);
+}
+
+void CollectNodes(Node *node, std::vector<Cube> &octreeRender, int currentDepth)
+{
+    if (!node)
+        return;
+
+    // push this node's bounds
+    octreeRender.emplace_back(node->bounds, currentDepth);
+
+    // recurse through children
+    for (auto *child : node->GetChildren())
+    {
+        CollectNodes(child, octreeRender, currentDepth + 1);
+    }
 }

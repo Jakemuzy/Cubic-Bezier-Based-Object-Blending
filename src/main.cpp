@@ -5,6 +5,7 @@
 
 // assimp
 #include "Model.h"
+#include "Octree.h"
 
 int main(void)
 { 
@@ -53,8 +54,10 @@ int main(void)
         renderer.GetShader("OctreeShader").SetMat4("model", backpackModel);
         renderer.GetShader("OctreeShader").SetMat4("view", view);
         renderer.GetShader("OctreeShader").SetMat4("projection", projection);
+        backpack.DrawOctree(renderer.GetShader("OctreeShader"));
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
+        
         //  Backpack.octree.draw(;)
 
         /*

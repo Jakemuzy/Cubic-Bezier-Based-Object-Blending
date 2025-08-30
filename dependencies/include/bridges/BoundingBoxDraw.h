@@ -1,13 +1,22 @@
+#ifndef _BOUNDING_BOX_RENDER_H__
+#define _BOUNDING_BOX_RENDER_H__
 
 #include <vector>
 
+#include "Shader.h"
 #include "GraphicsRenderer.h"
 
+struct BoundingBox
+{
+    glm::vec3 min;
+    glm::vec3 max;
+};
 
 //  TEMPORARILY here for now until we set up a bridge
 class Cube
 {
 private:
+    int depth = 1;
     unsigned int VBO, EBO;
 
     BoundingBox bounds;
@@ -17,7 +26,7 @@ private:
 public:
     unsigned int VAO;
 
-    Cube(BoundingBox _bounds) : bounds(_bounds)
+    Cube(BoundingBox _bounds, int _depth) : bounds(_bounds), depth(_depth)
     {
         SetupIndices();
         SetupVertices();
@@ -100,10 +109,14 @@ public:
         glBindVertexArray(0);
     }
 
-    void Draw()
+    void Draw(Shader& shader)
     {
+        shader.SetInt("currentDepth", depth);
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, static_cast<unsigned int>(indices.size()), GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
     }
 };
+
+
+#endif

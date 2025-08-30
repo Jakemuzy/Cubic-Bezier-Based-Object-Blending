@@ -55,8 +55,6 @@ public:
 class Model
 {
 private:
-    std::unique_ptr<Octree> octree = nullptr;
-
     std::vector<glm::vec3> vertexPositions;
     std::vector<Texture> textures_loaded; 
     std::vector<Mesh> meshes;
@@ -67,11 +65,16 @@ private:
     Mesh ProcessMesh(aiMesh *mesh, const aiScene *scene);
     std::vector<Texture> LoadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName);
 public:
+    std::unique_ptr<Octree> octree = nullptr;
+    std::vector<Cube> octreeRender = {};
+
     Model(char *path, std::string objName);
+
     std::vector<Mesh> GetMeshes() { return meshes; }
     std::vector<glm::vec3> GetVertices();
-    void Draw(Shader &shader);
 
+    void Draw(Shader &shader);
+    void DrawOctree(Shader &shader);    //  Not implemented yet
 };
 
 

@@ -12,6 +12,7 @@
                 "${workspaceFolder}/dependencies/include/external/imgui",
                 "${workspaceFolder}/dependencies/include/services",
                 "${workspaceFolder}/dependencies/include/application",
+                "${workspaceFolder}/dependencies/include/bridges",
                 "${workspaceFolder}/dependencies/include/glhelper"
             ],
             "defines": [

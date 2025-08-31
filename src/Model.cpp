@@ -96,10 +96,19 @@ Model::Model(char *path, std::string objName)
     octree = std::make_unique<Octree>(vertexPositions);
 }
 
-void Model::Draw(Shader &shader)
+void Model::Draw(Shader& shader)
 {
     for (unsigned int i = 0; i < meshes.size(); i++)
         meshes[i].Draw(shader);
+}
+
+void Model::DrawOctree(Shader& shader)
+{
+    if (octreeRender.empty())
+        CollectNodes(octree.get(), octreeRender, 1);
+    
+    for (auto& node : octreeRender)
+        node.Draw(shader);
 }
 
 std::vector<glm::vec3> Model::GetVertices()

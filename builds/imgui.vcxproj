@@ -78,7 +78,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include\imgui;C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include\external\imgui;C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include\external;C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -96,10 +96,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;_WINDOWS;CMAKE_INTDIR=\"Debug\"</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include\imgui;C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include\external\imgui;C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include\external;C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include\imgui;C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include\external\imgui;C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include\external;C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -112,7 +112,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include\imgui;C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include\external\imgui;C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include\external;C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <ExceptionHandling>Sync</ExceptionHandling>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
@@ -130,10 +130,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"Release\"</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include\imgui;C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include\external\imgui;C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include\external;C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include\imgui;C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include\external\imgui;C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include\external;C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -146,7 +146,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include\imgui;C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include\external\imgui;C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include\external;C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <ExceptionHandling>Sync</ExceptionHandling>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
@@ -164,10 +164,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"MinSizeRel\"</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include\imgui;C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include\external\imgui;C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include\external;C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include\imgui;C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include\external\imgui;C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include\external;C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -180,7 +180,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include\imgui;C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include\external\imgui;C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include\external;C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <ExceptionHandling>Sync</ExceptionHandling>
@@ -197,10 +197,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"RelWithDebInfo\"</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include\imgui;C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include\external\imgui;C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include\external;C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include\imgui;C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include\external\imgui;C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include\external;C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -269,12 +269,12 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include\imgui\imgui.cpp" />
-    <ClCompile Include="C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include\imgui\imgui_draw.cpp" />
-    <ClCompile Include="C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include\imgui\imgui_tables.cpp" />
-    <ClCompile Include="C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include\imgui\imgui_widgets.cpp" />
-    <ClCompile Include="C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include\imgui\imgui_impl_opengl3.cpp" />
-    <ClCompile Include="C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include\imgui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include\external\imgui\imgui.cpp" />
+    <ClCompile Include="C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include\external\imgui\imgui_draw.cpp" />
+    <ClCompile Include="C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include\external\imgui\imgui_tables.cpp" />
+    <ClCompile Include="C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include\external\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include\external\imgui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\dependencies\include\external\imgui\imgui_impl_glfw.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\builds\ZERO_CHECK.vcxproj">

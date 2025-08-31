@@ -13,7 +13,9 @@
                 "${workspaceFolder}/dependencies/include/services",
                 "${workspaceFolder}/dependencies/include/application",
                 "${workspaceFolder}/dependencies/include/bridges",
-                "${workspaceFolder}/dependencies/include/glhelper"
+                "${workspaceFolder}/dependencies/include/glhelper",
+                "${workspaceFolder}/dependencies/include/shared/shapes",
+                "${workspaceFolder}/dependencies/include/shared/math"
             ],
             "defines": [
                 "_DEBUG",

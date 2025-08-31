@@ -27,9 +27,6 @@
 #include "InputHandler.h"
 #include "Camera.h"
 
-// assimp
-#include "Model.h"
-
 /*
     This class's main purpose is to provide access to each of services,
     allowing for loose coupling of the data, and to query other classes

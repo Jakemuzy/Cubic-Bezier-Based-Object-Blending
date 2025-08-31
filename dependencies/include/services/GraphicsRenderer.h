@@ -5,6 +5,7 @@
 #include <functional>
 
 //  Shader includes all opengl headers
+#include "EventHandler.h"
 #include "Service.h"
 #include "Shader.h"
 
@@ -51,9 +52,6 @@ public:
 
     //  Send events that'll trigger draw
     void Draw();
-    //  Send event that will generate VAO, VBO, etc
-    void GenerateVAO();
-    void GenerateVAOEBO();
 
     //  Per frame code 
     void Update();

@@ -4,16 +4,11 @@
 #include <vector>
 
 #include "Shader.h"
+#include "Octree"
 #include "GraphicsRenderer.h"
 
-struct BoundingBox
-{
-    glm::vec3 min;
-    glm::vec3 max;
-};
-
 //  TEMPORARILY here for now until we set up a bridge
-class Cube
+class OctreeBridge
 {
 private:
     int depth = 1;
@@ -28,8 +23,8 @@ public:
 
     Cube(BoundingBox _bounds, int _depth) : bounds(_bounds), depth(_depth)
     {
-        SetupIndices();
         SetupVertices();
+        SetupIndices();
         SetupShapeMesh();
     }
     ~Cube()
@@ -42,51 +37,46 @@ public:
     //  Drawn based on BoundingBox
     void SetupIndices()
     {
-        indices.resize(36);
         indices = {
             // Bottom
-            0, 2, 3,
-            3, 1, 0,
+            0, 1, 2,
+            2, 3, 0,
 
             // Top
-            4, 5, 7,
-            7, 6, 4,
+            4, 7, 6,
+            6, 5, 4,
 
             // Front
-            1, 3, 7,
-            7, 5, 1,
+            3, 2, 6,
+            6, 7, 3,
 
             // Back
-            0, 4, 6,
-            6, 2, 0,
+            0, 4, 5,
+            5, 1, 0,
 
             // Left
-            0, 1, 5,
-            5, 4, 0,
+            0, 3, 7,
+            7, 4, 0,
 
             // Right
-            2, 6, 7,
-            7, 3, 2};
+            1, 5, 6,
+            6, 2, 1
+        };
     }
+
     void SetupVertices()
     {
-        //  Bottom Left Back
-        vertices.emplace_back(bounds.min);
-        //  Bottom Left Front
-        vertices.emplace_back(bounds.min.x, bounds.min.y, bounds.max.z);
-        //  Bottom Right Back
-        vertices.emplace_back(bounds.max.x, bounds.min.y, bounds.min.z);
-        //  Bottom Right Front
-        vertices.emplace_back(bounds.max.x, bounds.min.y, bounds.max.z);
+        // Bottom (y = min.y)
+        vertices.emplace_back(bounds.min.x, bounds.min.y, bounds.min.z); // 0 left-back
+        vertices.emplace_back(bounds.max.x, bounds.min.y, bounds.min.z); // 1 right-back
+        vertices.emplace_back(bounds.max.x, bounds.min.y, bounds.max.z); // 2 right-front
+        vertices.emplace_back(bounds.min.x, bounds.min.y, bounds.max.z); // 3 left-front
 
-        //  Top Left Back
-        vertices.emplace_back(bounds.min.x, bounds.max.y, bounds.min.z);
-        //  Top Left Front
-        vertices.emplace_back(bounds.min.x, bounds.max.y, bounds.max.z);
-        //  Top Right Back
-        vertices.emplace_back(bounds.max.x, bounds.max.y, bounds.min.z);
-        //  Top Right Front
-        vertices.emplace_back(bounds.max);
+        // Top (y = max.y)
+        vertices.emplace_back(bounds.min.x, bounds.max.y, bounds.min.z); // 4 left-back
+        vertices.emplace_back(bounds.max.x, bounds.max.y, bounds.min.z); // 5 right-back
+        vertices.emplace_back(bounds.max.x, bounds.max.y, bounds.max.z); // 6 right-front
+        vertices.emplace_back(bounds.min.x, bounds.max.y, bounds.max.z); // 7 left-front
     }
 
     void SetupShapeMesh()
@@ -102,7 +92,7 @@ public:
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
 
-        // vertex Positions
+        // Positions
         glEnableVertexAttribArray(0);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void *)0);
 

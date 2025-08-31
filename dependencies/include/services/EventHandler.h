@@ -3,10 +3,7 @@
 
 #include <functional>
 
-//  My stuff
-#include "Service.h"
-
-class Event : public Service
+class Event 
 {
 private:
     std::vector<std::function<void()>> events;

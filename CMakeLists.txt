@@ -43,7 +43,9 @@ target_include_directories(
         ${PROJECT_SOURCE_DIR}/dependencies/include/application
         ${PROJECT_SOURCE_DIR}/dependencies/include/bridges
         ${PROJECT_SOURCE_DIR}/dependencies/include/glhelper
-        ${PROJECT_SOURCE_DIR}/dependencies/include/external
+        ${PROJECT_SOURCE_DIR}/dependencies/include/external        
+        ${PROJECT_SOURCE_DIR}/dependencies/include/shared/shapes
+        ${PROJECT_SOURCE_DIR}/dependencies/include/shared/math
 
 )
 

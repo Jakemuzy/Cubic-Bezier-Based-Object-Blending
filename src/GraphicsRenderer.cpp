@@ -115,4 +115,3 @@ void GraphicsRenderer::Update()
     glfwSwapBuffers(window);
     glfwPollEvents();
 }
-

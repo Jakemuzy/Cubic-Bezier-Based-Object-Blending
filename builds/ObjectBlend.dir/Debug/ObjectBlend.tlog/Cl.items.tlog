@@ -1,9 +1,11 @@
 C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\src\Camera.cpp;C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\builds\ObjectBlend.dir\Debug\Camera.obj
-C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\src\EventHandler.cpp;C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\builds\ObjectBlend.dir\Debug\EventHandler.obj
-C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\src\GraphicsRenderer.cpp;C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\builds\ObjectBlend.dir\Debug\GraphicsRenderer.obj
 C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\src\InputHandler.cpp;C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\builds\ObjectBlend.dir\Debug\InputHandler.obj
+C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\src\Mesh.cpp;C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\builds\ObjectBlend.dir\Debug\Mesh.obj
+C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\src\MeshBridge.cpp;C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\builds\ObjectBlend.dir\Debug\MeshBridge.obj
 C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\src\Model.cpp;C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\builds\ObjectBlend.dir\Debug\Model.obj
+C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\src\ModelBridge.cpp;C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\builds\ObjectBlend.dir\Debug\ModelBridge.obj
 C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\src\Octree.cpp;C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\builds\ObjectBlend.dir\Debug\Octree.obj
+C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\src\OpenGLRenderer.cpp;C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\builds\ObjectBlend.dir\Debug\OpenGLRenderer.obj
 C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\src\Shader.cpp;C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\builds\ObjectBlend.dir\Debug\Shader.obj
 C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\src\glad.c;C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\builds\ObjectBlend.dir\Debug\glad.obj
 C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\src\main.cpp;C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\builds\ObjectBlend.dir\Debug\main.obj

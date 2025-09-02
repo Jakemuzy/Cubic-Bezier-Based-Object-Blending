@@ -4,19 +4,25 @@
     <ClCompile Include="C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\src\Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\src\EventHandler.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\src\GraphicsRenderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\src\InputHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\src\Mesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\src\MeshBridge.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\src\Model.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\src\ModelBridge.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\src\Octree.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\src\OpenGLRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\src\Shader.cpp">

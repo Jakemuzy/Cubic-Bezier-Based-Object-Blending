@@ -3,11 +3,15 @@
 
 #include <vector>
 
-#include "BoundingBoxDraw.h"
-
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+
+struct BoundingBox
+{
+    glm::vec3 min;
+    glm::vec3 max;
+};
 
 /*
     Octree, 
@@ -23,16 +27,16 @@ private:
     Node* parent;
     std::vector<Node*> children;
 
-    int maxTreeDepth = 6;
-    int currentDepth = 0;
-
+    int maxTreeDepth = 1;
 public:
     BoundingBox bounds;
+    int currentDepth = 1;
+
 
     Node() { }
-    Node(BoundingBox _bounds, int _currentDepth) : bounds(_bounds), currentDepth(_currentDepth) {}
+    Node(BoundingBox _bounds, int _currentDepth);
 
-    void DetermineChildren(BoundingBox _bounds, int _childrenCount);
+    void DetermineChildren(int treeLevel);
     std::vector<Node*> GetChildren() { return children; }
 };
 
@@ -43,7 +47,7 @@ private:
 public:
     Octree(std::vector<glm::vec3> _modelvertices);
 
-    friend void CollectNodes(Node* node, std::vector<Cube>& octreeRender, int currentDepth);
+    //friend void CollectNodes(Node* node, std::vector<Cube>& octreeRender);  //  CHANGE
 };
 
 

@@ -7,9 +7,7 @@
 #include <fstream>
 #include <sstream>
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
+#include "IShader.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -20,40 +18,56 @@
     based on input path alone
 */
 
-class Shader
+class Shader : public IShader
 {
 private:
-    //  Converts file to const char for shader info
-    std::string ReadFileData(std::string path);
-public:
     unsigned int ID;
+public:
+    
 
-    Shader();
-    Shader(std::string vPath, std::string fPath);
+    Shader() = default;
+    Shader(const std::string& vPath, const std::string& fPath);
 
-    void SetVertPath(std::string path);
-    void SetFragPath(std::string path);
+    void Use() override;
 
-    void Use();
+    unsigned int GetID() override { return ID; }
 
     // Utility uniform functions
-    void SetBool(const std::string &name, bool value) const;
-    void SetInt(const std::string &name, int value) const;
-    void SetFloat(const std::string &name, float value) const;
+    void SetBool(const std::string &name, bool value) const override;
+    void SetInt(const std::string &name, int value) const override;
+    void SetFloat(const std::string &name, float value) const override;
 
-    void SetVec3(const std::string &name, std::vector<float> values) const;
-    void SetVec3(const std::string &name, glm::vec3 values) const;
-    void SetVec3(const std::string &name, float values[3]) const;
-    void SetMat4(const std::string &name, glm::mat4 transformMatrix);
+    void SetVec3(const std::string &name, const glm::vec3& values) const override;
+    //void SetVec3(const std::string &name, const float values[3]) override;
+    void SetMat4(const std::string &name, const glm::mat4& transformMatrix) override;
 };
 
-//  All Shaders
-class ShaderGroup
+//  Reads the file
+static std::string ReadFileData(std::string path)
 {
-private:
-    std::vector<Shader> shaders;
-public:
-    ShaderGroup();
-};
+    std::ifstream shaderFile;
+    std::string data;
+
+    // ensure ifstream objects can throw exceptions:
+    shaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+    try
+    {
+        shaderFile.open(path);
+
+        std::stringstream shaderStream;
+        shaderStream << shaderFile.rdbuf();
+        shaderFile.close();
+
+        data = shaderStream.str();
+    }
+    catch (std::ifstream::failure e)
+    {
+        std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ " << std::endl;
+        std::cout << e.what() << "\n";
+        std::cout << path << "\n";
+    }
+
+    return data;
+}
 
 #endif

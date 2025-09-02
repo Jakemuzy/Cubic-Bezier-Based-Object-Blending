@@ -5,70 +5,60 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "EventHandler.h"
+#include "IRenderer.h"
+#include "OpenGLRenderer.h"
+#include "IInput.h"
 
 /*
     Singleton to handle all the user input 
 */
 
-class InputHandler : Service
+class InputHandler : public IInput
 {
 private:
     GLFWwindow *window;
-    std::vector<Event> KeyboardFunctions;
-    std::vector<Event> MouseFunctions;
+    Event<> KeyboardFunctions;
+    bool initalized = false;
+
+    /*
+    void HandleMouseMovement(double x, double y)
+    {
+        if (firstMouse)
+        {
+            lastX = x;
+            lastY = y;
+            firstMouse = false;
+        }
+
+        float xoffset = x - lastX;
+        float yoffset = lastY - y;
+        lastX = x;
+        lastY = y;
+
+    }
+
+    //  Need this to bridge the gap
+    static void MouseCallbackTrampoline(GLFWwindow *window, double xpos, double ypos)
+    {
+        InputHandler *handler = static_cast<InputHandler *>(glfwGetWindowUserPointer(window));
+        if (handler)
+            handler->HandleMouseMovement(xpos, ypos);
+    }
+    */
+
 public:
+    //  Mouse
+    //Event<double, double> mouseMoved;
+    bool firstMouse = true, disableMouseMovement = false;
+    float xPos, yPos;
+    float lastX = 400, lastY = 300;
+
     InputHandler() { initalized = false; }   //  Make these processes error if trying to use while not inialized
-    InputHandler(GLFWwindow *_window) : window(_window) { }
+    InputHandler(IRenderer* gr);
 
-    void AttachKeyboardProcess(Event _function);
-    void AttachMouseProcess(Event _function);
+    void AttachKeyboardProcess(std::function<void()> _function) override;
 
-    void ProcessInput();    
+    void ProcessInput() override;    
 };
 
 #endif
-
-/*
-void processInput(GLFWwindow* window)
-{
-    //Escape
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
-        glfwSetWindowShouldClose(window, true);
-        std::cout << "Closed Window\n";
-    }
-
-    // Move
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        camera.ProcessKeyboard(FORWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        camera.ProcessKeyboard(LEFT, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        camera.ProcessKeyboard(BACKWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        camera.ProcessKeyboard(RIGHT, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-        camera.ProcessKeyboard(UP, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-        camera.ProcessKeyboard(DOWN, deltaTime);
-
-    if (glfwGetKey(window, GLFW_KEY_9) == GLFW_PRESS && timeSinceLastCursorFocus >= 0.4f)
-    {
-        if (glfwGetInputMode(window, GLFW_CURSOR) == GLFW_CURSOR_NORMAL)
-        {
-            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-            disableMouseMovement = false;
-            firstMouse = true;
-        }
-        else if (glfwGetInputMode(window, GLFW_CURSOR) == GLFW_CURSOR_DISABLED)
-        {
-            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-
-            disableMouseMovement = true;
-        }
-
-        timeSinceLastCursorFocus = 0;
-    }
-    timeSinceLastCursorFocus += deltaTime;
-}
-*/

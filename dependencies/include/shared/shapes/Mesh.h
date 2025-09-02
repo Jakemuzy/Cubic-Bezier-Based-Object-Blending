@@ -6,7 +6,6 @@
 #include <glm/glm.hpp>
 
 #include "Shader.h"
-#include "ServiceProvider.h"
 #include "EventHandler.h"
 
 #include "Octree.h"

@@ -7,15 +7,13 @@
                 "${workspaceFolder}/dependencies/libs",
                 "${workspaceFolder}/dependencies/shaders",
                 "C:/Program Files (x86)/Windows Kits/10/Lib/10.0.22621.0/um/x86",
-                "${workspaceFolder}/dependencies/include",
-                "${workspaceFolder}/dependencies/include/external",
-                "${workspaceFolder}/dependencies/include/external/imgui",
-                "${workspaceFolder}/dependencies/include/services",
                 "${workspaceFolder}/dependencies/include/application",
                 "${workspaceFolder}/dependencies/include/bridges",
+                "${workspaceFolder}/dependencies/include/external",
                 "${workspaceFolder}/dependencies/include/glhelper",
-                "${workspaceFolder}/dependencies/include/shared/shapes",
-                "${workspaceFolder}/dependencies/include/shared/math"
+                "${workspaceFolder}/dependencies/include/interfaces",
+                "${workspaceFolder}/dependencies/include/services",
+                "${workspaceFolder}/dependencies/include/shared"
             ],
             "defines": [
                 "_DEBUG",

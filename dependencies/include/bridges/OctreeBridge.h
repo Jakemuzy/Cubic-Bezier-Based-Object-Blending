@@ -4,8 +4,8 @@
 #include <vector>
 
 #include "Shader.h"
-#include "Octree"
-#include "GraphicsRenderer.h"
+#include "Octree.h"
+#include "OpenGLRenderer.h"
 
 //  TEMPORARILY here for now until we set up a bridge
 class OctreeBridge
@@ -21,17 +21,11 @@ private:
 public:
     unsigned int VAO;
 
-    Cube(BoundingBox _bounds, int _depth) : bounds(_bounds), depth(_depth)
+    OctreeBridge(BoundingBox _bounds, int _depth) : bounds(_bounds), depth(_depth)
     {
         SetupVertices();
         SetupIndices();
         SetupShapeMesh();
-    }
-    ~Cube()
-    {
-        glDeleteVertexArrays(1, &VAO);
-        glDeleteBuffers(1, &VBO);
-        glDeleteBuffers(1, &EBO);
     }
 
     //  Drawn based on BoundingBox
@@ -99,7 +93,7 @@ public:
         glBindVertexArray(0);
     }
 
-    void Draw(Shader& shader)
+    void Draw(IShader& shader)
     {
         shader.SetInt("currentDepth", depth);
         glBindVertexArray(VAO);

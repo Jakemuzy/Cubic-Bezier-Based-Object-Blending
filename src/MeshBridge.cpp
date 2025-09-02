@@ -8,7 +8,8 @@ MeshBridge::MeshBridge(Mesh &mesh)
     SetupMesh(mesh);
 }
 
-void MeshBridge::SetupMesh(const Mesh& mesh)
+
+void MeshBridge::SetupMesh(Mesh& mesh)
 {
     glGenVertexArrays(1, &meshData.VAO);
     glGenBuffers(1, &meshData.VBO);
@@ -33,7 +34,7 @@ void MeshBridge::SetupMesh(const Mesh& mesh)
     glBindVertexArray(0);
 }
 
-void MeshBridge::Draw(Shader& shader)
+void MeshBridge::Draw(IShader& shader) const
 {
     // bind appropriate textures
     unsigned int diffuseNr = 1;
@@ -57,7 +58,7 @@ void MeshBridge::Draw(Shader& shader)
 
         // now set the sampler to the correct texture unit
 
-        glUniform1i(glGetUniformLocation(shader.ID, (name + number).c_str()), i);
+        glUniform1i(glGetUniformLocation(shader.GetID(), (name + number).c_str()), i);
         // and finally bind the texture
         glBindTexture(GL_TEXTURE_2D, meshData.textures[i].id);
     }

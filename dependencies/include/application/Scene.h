@@ -2,10 +2,12 @@
 #define _SCENE_H__
 
 #include <vector>
-#include <map>
+#include <unordered_map>
 
-#include "Model.h"
+#include "Shapes/Model.h"
 #include "ModelBridge.h"
+
+#include "IRenderer.h"
 
 /*
 struct ModelSceneData
@@ -21,26 +23,28 @@ struct ModelSceneData
 class Scene
 {
 private:
-    GraphicsRenderer& renderer;
+    OpenGLRenderer& renderer;
 
-    std::unordered_map<std::string, Model*> models;
+    std::unordered_map<std::string, std::unique_ptr<Model>> models;
     std::vector<ModelBridge> modelBridges;
 public:
-    Scene(ServiceProvider& sp) : renderer(sp.GetService<GraphicsRenderer>())
+    Scene(IRenderer* _renderer) : renderer(*static_cast<OpenGLRenderer*>(_renderer))
     {
-        models.emplace("backpack", new Model("C:\\Users\\jmuzy\\OneDrive\\Desktop\\Projects\\Object Blending\\backpack", "\\backpack.obj"));
+        models["backpack"] = std::make_unique<Model>(
+            "C:\\Users\\jmuzy\\OneDrive\\Desktop\\Projects\\Object Blending\\backpack",
+            "\\backpack.obj"
+        );
+
         ModelBridge mb;
         mb.AttachModel(*models["backpack"]);
         modelBridges.push_back(mb);
     }
 
-    ~Scene()
-    {
-        for (auto &model : models)
-        {
-            delete(model.second);
-        }
-    }
+    // Delete copy/move because of reference member
+    Scene(const Scene &) = delete;
+    Scene(Scene &&) = delete;
+    Scene &operator=(const Scene &) = delete;
+    Scene &operator=(Scene &&) = delete;
 
     void Update()
     {
@@ -51,17 +55,29 @@ public:
     }
 
     void Draw(glm::mat4& model, glm::mat4& view, glm::mat4& proj)
-    {
-        //  Ideally have the model view and projection per object
-        renderer.UseShader("BlockShader");
-        renderer.GetShader("BlockShader").SetMat4("model", model);
-        renderer.GetShader("BlockShader").SetMat4("view", view);
-        renderer.GetShader("BlockShader").SetMat4("projection", proj);
+    {        
 
+        std::cout << "draw begin\n";
         for (auto& modelBridge: modelBridges)
         {
-            modelBridge.Draw(renderer.GetShader("BlockShader"));
+            //  Ideally have the model view and projection per object
+            renderer.UseShader("BlockShader");
+
+            renderer.GetShader("BlockShader")->SetMat4("model", model);
+            renderer.GetShader("BlockShader")->SetMat4("view", view);
+            renderer.GetShader("BlockShader")->SetMat4("projection", proj);
+
+            modelBridge.Draw(*renderer.GetShader("BlockShader"));
+
+            /*
+            renderer.UseShader("OctreeShader");
+            renderer.GetShader("OctreeShader").SetMat4("model", model);
+            renderer.GetShader("OctreeShader").SetMat4("view", view);
+            renderer.GetShader("OctreeShader").SetMat4("projection", proj);
+            modelBridge.DrawOctree(renderer.GetShader("OctreeShader"));
+            */
         }
+
     }
 };
 

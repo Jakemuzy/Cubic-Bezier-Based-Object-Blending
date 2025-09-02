@@ -39,13 +39,13 @@ target_include_directories(
     ObjectBlend
     PRIVATE 
         ${PROJECT_SOURCE_DIR}/dependencies/include
-        ${PROJECT_SOURCE_DIR}/dependencies/include/services
         ${PROJECT_SOURCE_DIR}/dependencies/include/application
         ${PROJECT_SOURCE_DIR}/dependencies/include/bridges
+        ${PROJECT_SOURCE_DIR}/dependencies/include/external    
+        ${PROJECT_SOURCE_DIR}/dependencies/include/interfaces    
         ${PROJECT_SOURCE_DIR}/dependencies/include/glhelper
-        ${PROJECT_SOURCE_DIR}/dependencies/include/external        
-        ${PROJECT_SOURCE_DIR}/dependencies/include/shared/shapes
-        ${PROJECT_SOURCE_DIR}/dependencies/include/shared/math
+        ${PROJECT_SOURCE_DIR}/dependencies/include/services 
+        ${PROJECT_SOURCE_DIR}/dependencies/include/shared
 
 )
 

@@ -1,7 +1,7 @@
 #ifndef __JMODEL_H__
 #define __JMODEL_H__
 
-#include "Mesh.h"
+#include "Shapes/Mesh.h"
 
 /*
     The purpose of this class is to SOLELY convert assimp's vertices
@@ -22,15 +22,13 @@ private:
     Mesh ProcessMesh(aiMesh *mesh, const aiScene *scene);
     std::vector<Texture> LoadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName);
 public:
-    Event modelUpdated;
-
+    Event<> modelUpdated;
     std::unique_ptr<Octree> octree = nullptr;
-    //std::vector<Cube> octreeRender = {};
 
-    Model(char *path, std::string objName);
+    Model(const char *path, std::string objName);
 
-    std::vector<Mesh> GetMeshes() { return meshes; }
-    std::vector<glm::vec3> GetVertices();
+    std::vector<Mesh>& GetMeshes() { return meshes; }
+    void Model::InitalizeOctree();
 };
 
 

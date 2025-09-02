@@ -1,11 +1,29 @@
-#include "Model.h"
+#include "shapes/Model.h"
 
-Model::Model(char *path, std::string objName)
+Model::Model(const char *path, std::string objName)
 {
     LoadModel(path, objName);
+    InitalizeOctree();
+}
 
-    //  Create Octree
-    //octree = std::make_unique<Octree>(vertexPositions);
+void Model::InitalizeOctree()
+{
+    std::vector<glm::vec3> vertexPositions;
+
+    size_t total = 0;
+    for (const auto &mesh : meshes)
+        total += mesh.vertices.size();
+    vertexPositions.reserve(total);
+
+    for (const auto &mesh : meshes)
+    {
+        for (const auto &vertex : mesh.vertices)
+        {
+            vertexPositions.emplace_back(vertex.Position);
+        }
+    }
+
+    octree = std::make_unique<Octree>(vertexPositions);
 }
 
 void Model::LoadModel(std::string path, std::string objName)
@@ -125,25 +143,4 @@ std::vector<Texture> Model::LoadMaterialTextures(aiMaterial *mat, aiTextureType 
     return textures;
 }
 
-/*
-std::vector<Vertex> Model::GetAllVertices()
-{
-    std::vector<Vertex> vertexPositions;
 
-    size_t total = 0;
-    for (const auto &mesh : meshes)
-        total += mesh.vertices.size();
-    vertexPositions.reserve(total);
-
-    for (const auto &mesh : meshes)
-    {
-        for (const auto &vertex : mesh.vertices)
-        {
-            vertexPositions.emplace_back(vertex.Position);
-        }
-    }
-
-    return vertexPositions;
-}
-
-*/

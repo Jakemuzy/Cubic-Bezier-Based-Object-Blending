@@ -1,11 +1,8 @@
 #ifndef __CAMERA_H__
 #define __CAMERA_H__
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
+#include "ICamera.h"
 
-#include "Service.h"
 
 /*
     This class is meant to act as a camera using matrix
@@ -13,10 +10,6 @@
     camera
 */
 
-enum Camera_Movement 
-{
-    RIGHT, LEFT, BACKWARD, FORWARD, UP, DOWN
-};
 
 // Default camera values
 const float YAW = -90.0f;
@@ -25,7 +18,7 @@ const float SPEED = 30.0f;
 const float SENSITIVITY = 0.1f;
 const float ZOOM = 45.0f;
 
-class Camera : public Service
+class Camera : public ICamera
 {
 private:
     void updateCameraVectors();
@@ -43,14 +36,14 @@ public:
     float MouseSensitivity;
     float Zoom;
 
-    Camera() { initalized = false; }    //  Throw error if unitalized
+    Camera() = default;   //  Throw error if unitalized
     Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch);
     Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch);
 
     glm::mat4 GetViewMatrix();
 
-    void ProcessKeyboard(Camera_Movement direction, float deltaTime);
-    void ProcessMouseMovement(float xoffset, float yoffset, bool constrainPitch);
+    void ProcessKeyboard(Camera_Movement direction, float deltaTime) override;
+    void ProcessMouseMovement(float xoffset, float yoffset, bool constrainPitch) override;
 
 };
 

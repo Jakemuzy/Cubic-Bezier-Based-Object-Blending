@@ -1,5 +1,5 @@
 
-#include "Mesh.h"
+#include "shapes/Mesh.h"
 
 struct MeshData
 {
@@ -17,6 +17,6 @@ private:
 public:
     MeshBridge(Mesh &mesh);
 
-    void SetupMesh(const Mesh& mesh);
-    void Draw(Shader& shader);
+    void SetupMesh(Mesh& mesh);
+    void Draw(IShader& shader) const;
 };

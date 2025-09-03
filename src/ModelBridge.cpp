@@ -7,7 +7,7 @@ std::vector<OctreeBridge> ModelBridge::octreeBridges;
 void ModelBridge::AttachModel(Model &model)
 {
     models.push_back(&model);
-    octreeBridges.emplace_back(model.octree->bounds, 1);
+    octreeBridges.emplace_back(*model.octree.get());
 
     for (auto &mesh : model.GetMeshes())
     {

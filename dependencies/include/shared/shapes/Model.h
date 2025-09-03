@@ -28,6 +28,7 @@ public:
     Model(const char *path, std::string objName);
 
     std::vector<Mesh>& GetMeshes() { return meshes; }
+    
     void Model::InitalizeOctree();
 };
 

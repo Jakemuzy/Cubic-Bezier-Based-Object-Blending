@@ -2,6 +2,7 @@
 #define _OCTREE_H__
 
 #include <vector>
+#include <memory>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -25,31 +26,29 @@ class Node
 {
 private:
     Node* parent;
-    std::vector<Node*> children;
+    std::vector<std::unique_ptr<Node>> children;
 
-    int maxTreeDepth = 1;
+    int maxTreeDepth = 5;
 public:
     BoundingBox bounds;
+    std::vector<glm::vec3> vertices;
     int currentDepth = 1;
 
+    Node() = default;
+    Node(BoundingBox _bounds, int _currentDepth, std::vector<glm::vec3> _vertices);
 
-    Node() { }
-    Node(BoundingBox _bounds, int _currentDepth);
-
-    void DetermineChildren(int treeLevel);
-    std::vector<Node*> GetChildren() { return children; }
+    void DetermineChildren();
+    std::vector<std::unique_ptr<Node>>& GetChildren() { return children; }
 };
 
-class Octree : public Node
+class Octree 
 {
-private: 
-    std::vector<glm::vec3> modelVertices;
+private:
+    std::unique_ptr<Node> root;
 public:
-    Octree(std::vector<glm::vec3> _modelvertices);
-
-    //friend void CollectNodes(Node* node, std::vector<Cube>& octreeRender);  //  CHANGE
+    Octree(const std::vector<glm::vec3>& _modelVertices);
+    Node* GetRoot() { return root.get(); }
 };
-
 
 
 

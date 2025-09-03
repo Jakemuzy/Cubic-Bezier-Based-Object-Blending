@@ -2,30 +2,43 @@
 #define _BOUNDING_BOX_RENDER_H__
 
 #include <vector>
+#include <memory>
 
 #include "Shader.h"
 #include "Octree.h"
 #include "OpenGLRenderer.h"
 
 //  TEMPORARILY here for now until we set up a bridge
-class OctreeBridge
+class NodeBridge
 {
 private:
-    int depth = 1;
     unsigned int VBO, EBO;
+    std::vector<std::unique_ptr<NodeBridge>> children;
 
-    BoundingBox bounds;
     std::vector<glm::vec3> vertices;
     std::vector<unsigned int> indices;
 
+    int depth;
 public:
     unsigned int VAO;
 
-    OctreeBridge(BoundingBox _bounds, int _depth) : bounds(_bounds), depth(_depth)
+    NodeBridge(Node* node, int _depth) : depth(_depth)
     {
-        SetupVertices();
+        SetupVertices(node);
         SetupIndices();
         SetupShapeMesh();
+
+        for (auto& child : node->GetChildren())
+        {
+            children.push_back(std::make_unique<NodeBridge>(child.get(), depth + 1));
+        }
+    }
+
+    ~NodeBridge()
+    {
+        glDeleteVertexArrays(1, &VAO);
+        glDeleteBuffers(1, &VBO);
+        glDeleteBuffers(1, &EBO);
     }
 
     //  Drawn based on BoundingBox
@@ -54,12 +67,13 @@ public:
 
             // Right
             1, 5, 6,
-            6, 2, 1
-        };
+            6, 2, 1};
     }
 
-    void SetupVertices()
+    void SetupVertices(Node* node)
     {
+        BoundingBox bounds = node->bounds;
+
         // Bottom (y = min.y)
         vertices.emplace_back(bounds.min.x, bounds.min.y, bounds.min.z); // 0 left-back
         vertices.emplace_back(bounds.max.x, bounds.min.y, bounds.min.z); // 1 right-back
@@ -93,12 +107,41 @@ public:
         glBindVertexArray(0);
     }
 
-    void Draw(IShader& shader)
+    void Draw(IShader &shader)
     {
+        // Draw this node
         shader.SetInt("currentDepth", depth);
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, static_cast<unsigned int>(indices.size()), GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
+
+        // Draw all children recursively
+        for (auto &child : children)
+        {
+            child->Draw(shader);
+        }
+    }
+};
+
+class OctreeBridge
+{
+private:
+    std::unique_ptr<NodeBridge> rootNodeBridge;
+    
+public:
+    
+    OctreeBridge() = default;
+    OctreeBridge(Octree& octree)
+    {
+        rootNodeBridge = std::make_unique<NodeBridge>(octree.GetRoot(), 1);
+    }
+
+    void Draw(IShader& shader)
+    {
+        if (rootNodeBridge)
+        {
+            rootNodeBridge->Draw(shader);
+        }
     }
 };
 

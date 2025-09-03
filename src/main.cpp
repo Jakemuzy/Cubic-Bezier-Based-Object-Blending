@@ -32,7 +32,7 @@ int main(void)
         static_cast<InputHandler*>(input.get())->ProcessInput();
         //input->ProcessInput();
 
-        glClearColor(0.1f, 0.2f, 0.2f, 1.0f);
+        glClearColor(0.18f, 0.18f, 0.2f, 1.0f); 
         renderer->ClearBuffer(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         glm::mat4 view = cam->GetViewMatrix();
@@ -47,7 +47,6 @@ int main(void)
         renderer.GetShader("OctreeShader").SetMat4("projection", projection);
         backpack.DrawOctree(renderer.GetShader("OctreeShader"));
 
-        
         //  Backpack.octree.draw(;)
         */
 

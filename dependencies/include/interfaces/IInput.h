@@ -3,12 +3,19 @@
 
 #include "EventHandler.h"
 
+struct MousePos
+{
+    float x, y;
+    MousePos(float _x, float _y) : x(_x), y(_y)  { }
+};
+
 class IInput
 {
 private:
 public:
     virtual void AttachKeyboardProcess(std::function<void()> _function) = 0;
     virtual void ProcessInput() = 0;
+    virtual MousePos GetMousePos() = 0;
 };
 
 #endif

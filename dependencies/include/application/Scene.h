@@ -56,8 +56,6 @@ public:
 
     void Draw(glm::mat4& model, glm::mat4& view, glm::mat4& proj)
     {        
-
-        std::cout << "draw begin\n";
         for (auto& modelBridge: modelBridges)
         {
             //  Ideally have the model view and projection per object
@@ -69,13 +67,13 @@ public:
 
             modelBridge.Draw(*renderer.GetShader("BlockShader"));
 
-            /*
+            
             renderer.UseShader("OctreeShader");
-            renderer.GetShader("OctreeShader").SetMat4("model", model);
-            renderer.GetShader("OctreeShader").SetMat4("view", view);
-            renderer.GetShader("OctreeShader").SetMat4("projection", proj);
-            modelBridge.DrawOctree(renderer.GetShader("OctreeShader"));
-            */
+            renderer.GetShader("OctreeShader")->SetMat4("model", model);
+            renderer.GetShader("OctreeShader")->SetMat4("view", view);
+            renderer.GetShader("OctreeShader")->SetMat4("projection", proj);
+            modelBridge.DrawOctree(*renderer.GetShader("OctreeShader"));
+            
         }
 
     }

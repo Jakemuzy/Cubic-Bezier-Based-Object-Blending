@@ -18,9 +18,10 @@ class InputHandler : public IInput
 private:
     GLFWwindow *window;
     Event<> KeyboardFunctions;
+    Event<float, float> MouseFunctions;
     bool initalized = false;
 
-    /*
+    
     void HandleMouseMovement(double x, double y)
     {
         if (firstMouse)
@@ -34,7 +35,6 @@ private:
         float yoffset = lastY - y;
         lastX = x;
         lastY = y;
-
     }
 
     //  Need this to bridge the gap
@@ -44,7 +44,7 @@ private:
         if (handler)
             handler->HandleMouseMovement(xpos, ypos);
     }
-    */
+    
 
 public:
     //  Mouse
@@ -57,6 +57,7 @@ public:
     InputHandler(IRenderer* gr);
 
     void AttachKeyboardProcess(std::function<void()> _function) override;
+    MousePos GetMousePos() override;
 
     void ProcessInput() override;    
 };

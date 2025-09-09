@@ -9,16 +9,20 @@
 
 #include "IRenderer.h"
 
-/*
-struct ModelSceneData
-{
-    glm::mat4 model = glm::mat4(1.0f);
-    treestumpModel = glm::rotate(treestumpModel, glm::radians(90.0f), glm::vec3(-1, 0, 0));
-    treestumpModel = glm::translate(treestumpModel, glm::vec3(-5, 0, 3.5));
+#include "CollisionDetection.h"
 
-    glm::mat4 projection = glm::perspective((float)glm::radians(60.0f), (float)1920.0f / (float)1080, 0.1f, 100.0f);
-}
-    */
+
+struct ModelData
+{
+    glm::mat4 modelTransform = glm::mat4(1.0f);
+    glm::mat4* view;    //  shared ptrs 
+    glm::mat4* proj;
+
+    std::string modelName;
+
+    std::unique_ptr<Model> model;
+    std::unique_ptr<ModelBridge> modelBridge;
+};
 
 class Scene
 {
@@ -26,18 +30,30 @@ private:
     OpenGLRenderer& renderer;
 
     std::unordered_map<std::string, std::unique_ptr<Model>> models;
-    std::vector<ModelBridge> modelBridges;
+    std::unordered_map<std::string, std::unique_ptr<ModelBridge>> modelBridges;
+
+    bool drawOctrees = true;
 public:
     Scene(IRenderer* _renderer) : renderer(*static_cast<OpenGLRenderer*>(_renderer))
     {
+        
         models["backpack"] = std::make_unique<Model>(
             "C:\\Users\\jmuzy\\OneDrive\\Desktop\\Projects\\Object Blending\\backpack",
             "\\backpack.obj"
         );
 
-        ModelBridge mb;
-        mb.AttachModel(*models["backpack"]);
-        modelBridges.push_back(mb);
+        auto mb = std::make_unique<ModelBridge>();
+        mb->AttachModel(models["backpack"].get());
+        modelBridges["backpack"] = std::move(mb);
+
+        models["girl"] = std::make_unique<Model>(
+            "C:\\Users\\jmuzy\\OneDrive\\Desktop\\Projects\\Object Blending\\girl",
+            "\\girl.obj"
+        );
+        
+        auto mb2 = std::make_unique<ModelBridge>();
+        mb2->AttachModel(models["girl"].get());
+        modelBridges["girl"] = std::move(mb2);
     }
 
     // Delete copy/move because of reference member
@@ -46,36 +62,48 @@ public:
     Scene &operator=(const Scene &) = delete;
     Scene &operator=(Scene &&) = delete;
 
-    void Update()
+    void UpdateOctree(std::string modelName, glm::vec3 deltaMovement)
     {
-        for (auto& model : models)
-        {
-            //model.Update();
-        }
+        models.find(modelName)->second->modelUpdated.RaiseEvent(deltaMovement);
     }
 
-    void Draw(glm::mat4& model, glm::mat4& view, glm::mat4& proj)
-    {        
-        for (auto& modelBridge: modelBridges)
+    void DrawModel(glm::mat4 &model, glm::mat4 &view, glm::mat4 &proj, std::string modelName)
+    {
+
+        renderer.UseShader("ModelShader");
+
+        renderer.GetShader("ModelShader")->SetMat4("model", model);
+        renderer.GetShader("ModelShader")->SetMat4("view", view);
+        renderer.GetShader("ModelShader")->SetMat4("projection", proj);
+
+        modelBridges.find(modelName)->second->Draw(*renderer.GetShader("BlockShader"));
+
+        //  Updates models octree based on model matrix, ideally cache this so it isn't updated per frame
+        //models.find(modelName)->second->modelUpdated.RaiseEvent(model);
+
+        if (drawOctrees)
         {
-            //  Ideally have the model view and projection per object
-            renderer.UseShader("BlockShader");
-
-            renderer.GetShader("BlockShader")->SetMat4("model", model);
-            renderer.GetShader("BlockShader")->SetMat4("view", view);
-            renderer.GetShader("BlockShader")->SetMat4("projection", proj);
-
-            modelBridge.Draw(*renderer.GetShader("BlockShader"));
-
-            
             renderer.UseShader("OctreeShader");
             renderer.GetShader("OctreeShader")->SetMat4("model", model);
             renderer.GetShader("OctreeShader")->SetMat4("view", view);
             renderer.GetShader("OctreeShader")->SetMat4("projection", proj);
-            modelBridge.DrawOctree(*renderer.GetShader("OctreeShader"));
-            
-        }
 
+            modelBridges.find(modelName)->second->DrawOctree(*renderer.GetShader("OctreeShader"));
+        }
+    }
+
+    void Draw(glm::mat4 &model, glm::mat4 &view, glm::mat4 &proj)
+    {
+        //  Have a vector of ModelData and draw every single one in here
+        //  Check if any of the models intersect
+    }
+
+    void CheckIntersections()
+    {
+        if (Collision::CheckCollision(models["backpack"]->octree.get(), models["girl"]->octree.get()))
+            std::cout << "COLLIDING \n";
+        else 
+            std::cout << "NOT COLLIDING \n";
     }
 };
 

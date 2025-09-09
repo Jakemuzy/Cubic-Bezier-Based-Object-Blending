@@ -26,24 +26,13 @@ public:
         GLFWwindow *window = static_cast<GLFWwindow*>(renderer->GetWindow()->GetNativeHandle());
         Camera* cam = static_cast<Camera*>(camera);
 
-        std::function<void()> movement = [=]{
-            if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-                cam->ProcessKeyboard(FORWARD, *deltaTime);
-            if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-                cam->ProcessKeyboard(BACKWARD, *deltaTime);
-            if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-                cam->ProcessKeyboard(LEFT, *deltaTime);
-            if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-                cam->ProcessKeyboard(RIGHT, *deltaTime);
-            if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
-                cam->ProcessKeyboard(UP, *deltaTime);
-            if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-                cam->ProcessKeyboard(DOWN, *deltaTime); 
-        };
+        input->AttachKeyEvent( [=](){ cam->ProcessKeyboard(FORWARD, *deltaTime); }, GLFW_KEY_W );
+        input->AttachKeyEvent( [=](){ cam->ProcessKeyboard(LEFT, *deltaTime); }, GLFW_KEY_A );
+        input->AttachKeyEvent( [=](){ cam->ProcessKeyboard(BACKWARD, *deltaTime); }, GLFW_KEY_S );
+        input->AttachKeyEvent( [=](){ cam->ProcessKeyboard(RIGHT, *deltaTime); }, GLFW_KEY_D );
+        input->AttachKeyEvent( [=](){ cam->ProcessKeyboard(UP, *deltaTime); }, GLFW_KEY_SPACE );
+        input->AttachKeyEvent( [=](){ cam->ProcessKeyboard(DOWN, *deltaTime); }, GLFW_KEY_LEFT_SHIFT );
         
-
-        input->AttachKeyboardProcess(movement);
-
         return input;
     }
 };

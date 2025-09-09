@@ -1,15 +1,9 @@
 #include "ModelBridge.h"
 
-std::vector<Model*> ModelBridge::models;
-std::vector<MeshBridge> ModelBridge::meshBridges;
-std::vector<OctreeBridge> ModelBridge::octreeBridges;
-
-void ModelBridge::AttachModel(Model &model)
+void ModelBridge::AttachModel(Model* _model)
 {
-    models.push_back(&model);
-    octreeBridges.emplace_back(*model.octree.get());
-
-    for (auto &mesh : model.GetMeshes())
+    octreeBridges.push_back(std::make_unique<OctreeBridge>(_model->octree.get()));
+    for (auto &mesh : (*_model).GetMeshes())
     {
         meshBridges.emplace_back(mesh);
     }
@@ -25,6 +19,6 @@ void ModelBridge::DrawOctree(IShader& shader)
 {
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     for(auto& octree : octreeBridges)
-        octree.Draw(shader);
+        octree->Draw(shader);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }

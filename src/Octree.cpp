@@ -48,6 +48,17 @@ void Node::DetermineChildren()
     }
 }
 
+void Node::UpdateBounds(glm::vec3 deltaMovement)
+{
+    bounds.min += deltaMovement;
+    bounds.max += deltaMovement;
+
+    for(auto& child : children)
+    {
+        child->UpdateBounds(deltaMovement);
+    }
+}
+
 Octree::Octree(const std::vector<glm::vec3>& modelVertices)
 {
     float xMin = FLT_MAX, xMax = -FLT_MAX;

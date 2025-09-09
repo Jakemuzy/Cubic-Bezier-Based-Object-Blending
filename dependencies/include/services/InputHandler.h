@@ -56,7 +56,7 @@ public:
     InputHandler() { initalized = false; }   //  Make these processes error if trying to use while not inialized
     InputHandler(IRenderer* gr);
 
-    void AttachKeyboardProcess(std::function<void()> _function) override;
+    void AttachKeyEvent(std::function<void()> _function, unsigned int GLKey) override;
     MousePos GetMousePos() override;
 
     void ProcessInput() override;    

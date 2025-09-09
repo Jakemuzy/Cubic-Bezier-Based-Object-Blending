@@ -8,17 +8,16 @@
 #include "MeshBridge.h"
 #include "OctreeBridge.h"
 
+//  Need to make this per instance
 
 class ModelBridge
 {
 private:
-
 public:
-    static std::vector<Model*> models;
-    static std::vector<MeshBridge> meshBridges;
-    static std::vector<OctreeBridge> octreeBridges;
+    std::vector<MeshBridge> meshBridges;
+    std::vector<std::unique_ptr<OctreeBridge>> octreeBridges;
 
-    static void AttachModel(Model& model);
+    void AttachModel(Model* _model);
     void Draw(IShader& shader);
     void DrawOctree(IShader& shader);
 };

@@ -30,6 +30,7 @@ private:
 
     int maxTreeDepth = 5;
 public:
+    //  Bounds in world space, verticies in local
     BoundingBox bounds;
     std::vector<glm::vec3> vertices;
     int currentDepth = 1;
@@ -39,6 +40,8 @@ public:
 
     void DetermineChildren();
     std::vector<std::unique_ptr<Node>>& GetChildren() { return children; }
+
+    void UpdateBounds(glm::vec3 deltaMovement);
 };
 
 class Octree 
@@ -48,6 +51,9 @@ private:
 public:
     Octree(const std::vector<glm::vec3>& _modelVertices);
     Node* GetRoot() { return root.get(); }
+
+    //  Only works with translation for now
+    void UpdateOctree(glm::vec3 deltaMovement) { root->UpdateBounds(deltaMovement); }
 };
 
 

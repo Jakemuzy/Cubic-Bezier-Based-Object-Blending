@@ -4,6 +4,11 @@ Model::Model(const char *path, std::string objName)
 {
     LoadModel(path, objName);
     InitalizeOctree();
+
+    modelUpdated.Subscribe( [&](glm::vec3 deltaMovement){
+        octree->UpdateOctree(deltaMovement);
+        }
+    );
 }
 
 void Model::InitalizeOctree()
@@ -30,7 +35,11 @@ void Model::LoadModel(std::string path, std::string objName)
 {
     Assimp::Importer import;
     std::string objPath = path + objName;
-    const aiScene *scene = import.ReadFile(objPath, aiProcess_Triangulate | aiProcess_FlipUVs);
+    const aiScene *scene = import.ReadFile(objPath,
+        aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices |
+        aiProcess_FixInfacingNormals | aiProcess_ImproveCacheLocality | 
+        aiProcess_RemoveRedundantMaterials // | aiProcess_PreTransformVertices
+    );
 
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
     {

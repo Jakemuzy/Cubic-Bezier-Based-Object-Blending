@@ -127,13 +127,12 @@ class OctreeBridge
 {
 private:
     std::unique_ptr<NodeBridge> rootNodeBridge;
-    
 public:
     
     OctreeBridge() = default;
-    OctreeBridge(Octree& octree)
+    OctreeBridge(Octree* octree)
     {
-        rootNodeBridge = std::make_unique<NodeBridge>(octree.GetRoot(), 1);
+        rootNodeBridge = std::make_unique<NodeBridge>(octree->GetRoot(), 1);
     }
 
     void Draw(IShader& shader)

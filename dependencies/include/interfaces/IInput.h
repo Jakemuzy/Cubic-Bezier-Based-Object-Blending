@@ -13,7 +13,8 @@ class IInput
 {
 private:
 public:
-    virtual void AttachKeyboardProcess(std::function<void()> _function) = 0;
+    virtual void AttachKeyEvent(std::function<void()> _function, unsigned int GLKey) = 0;
+
     virtual void ProcessInput() = 0;
     virtual MousePos GetMousePos() = 0;
 };

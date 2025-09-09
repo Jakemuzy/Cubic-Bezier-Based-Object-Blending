@@ -22,7 +22,8 @@ private:
     Mesh ProcessMesh(aiMesh *mesh, const aiScene *scene);
     std::vector<Texture> LoadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName);
 public:
-    Event<> modelUpdated;
+    Event<glm::vec3> modelUpdated;
+    //  Realistically should be shared ptr
     std::unique_ptr<Octree> octree = nullptr;
 
     Model(const char *path, std::string objName);

@@ -8,9 +8,15 @@ InputHandler::InputHandler(IRenderer* gr) : window(static_cast<GLFWwindow*>(gr->
     glRender->AttachMouseCallback(MouseCallbackTrampoline);
 }
 
-void InputHandler::AttachKeyboardProcess(std::function<void()> _function)
+void InputHandler::AttachKeyEvent(std::function<void()> _function, unsigned int GLKey)
 {
-    KeyboardFunctions.Subscribe(_function);
+    std::function<void()> keyEvent = [=]
+    {
+        if (glfwGetKey(window, GLKey) == GLFW_PRESS)
+            _function();
+    };
+
+    KeyboardFunctions.Subscribe(keyEvent);
 }
 
 MousePos InputHandler::GetMousePos()

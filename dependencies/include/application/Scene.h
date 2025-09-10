@@ -100,7 +100,7 @@ public:
 
     void CheckIntersections()
     {
-        if (Collision::CheckCollision(models["backpack"]->octree.get(), models["girl"]->octree.get()))
+        if (!Collision::CheckCollision(models["backpack"]->octree.get(), models["girl"]->octree.get())->empty())
             std::cout << "COLLIDING \n";
         else 
             std::cout << "NOT COLLIDING \n";

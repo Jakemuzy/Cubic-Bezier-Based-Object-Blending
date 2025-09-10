@@ -63,7 +63,6 @@ int main(void)
     // Main Loop
     while (!static_cast<OpenGLRenderer *>(renderer.get())->GetWindowCloseStatus())
     {
-        //  Update deltatime
         static_cast<InputHandler*>(input.get())->ProcessInput();
 
         glClearColor(0.18f, 0.18f, 0.2f, 1.0f); 
@@ -71,11 +70,9 @@ int main(void)
 
         glm::mat4 view = cam->GetViewMatrix();
 
-        //scene.Draw(backpackModel, view, projection);
         scene.DrawModel(backpackModel, view, projection, "backpack");
         scene.DrawModel(girlModel, view, projection, "girl");
 
-        glm::vec3 aTrans, bTrans;
         scene.CheckIntersections();
         renderer->Update();
     }

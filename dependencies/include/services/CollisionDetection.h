@@ -3,6 +3,9 @@
 
 #include "Octree.h"
 
+using LeafPair = std::pair<Node*, Node*>;
+using LeafPairs = std::vector<LeafPair>;
+
 static class Collision
 {
 private:
@@ -16,25 +19,61 @@ private:
             return false;
         return true;
     }
-    
-    bool static CompareNodes(Node* a, Node* b)
-    {
-        if (!BoundsIntersect(a->bounds, b->bounds))
-            return false;
 
-        if(!a->GetChildren().empty() && !b->GetChildren().empty())
+    void static CompareNodes(Node *a, Node *b, std::unique_ptr<LeafPairs>& lp)
+    {
+        //  Base case, they don't intersect
+        if (!BoundsIntersect(a->bounds, b->bounds))
+            return;
+
+        auto &aChildren = a->GetChildren(), bChildren = b->GetChildren();
+
+        //  Case 1, both are leaf nodes
+        if (aChildren.empty() && bChildren.empty())
         {
+            lp->push_back(std::pair<Node*, Node*>(a, b));
+            return;
         }
+
+        //  Case 2, both are parents
+        if (!aChildren.empty() && !bChildren.empty())
+        {
+            for (auto &aChild : aChildren)
+            {
+                for (auto &bChild : bChildren)
+                {
+                    CompareNodes(aChild.get(), bChild.get(), lp);
+                }
+            }
+        }
+
+        //  Case 3, one is parent, other is leaf node
+        if(!aChildren.empty() && bChildren.empty())
+        {
+            for (auto &aChild : aChildren)
+            {
+                CompareNodes(aChild.get(), b, lp);
+            }
+        }
+        if(aChildren.empty() && !bChildren.empty())
+        {
+            for (auto &bChild : bChildren)
+            {
+                CompareNodes(a, bChild.get(), lp);
+            }
+        }
+
+        
     }
 
 public:
     //  Make this shared_ptr, also make this take ModelData struct instead
-    bool static CheckCollision(Octree* a, Octree* b)
+    std::unique_ptr<LeafPairs> static CheckCollision(Octree* a, Octree* b)
     {
-        //if (CompareNodes(a->GetRoot(), b->GetRoot()))
-        if(BoundsIntersect(a->GetRoot()->bounds, b->GetRoot()->bounds))
-            return true;
-        return false;
+        std::unique_ptr<LeafPairs> lp = std::make_unique<LeafPairs>();
+
+        CompareNodes(a->GetRoot(), b->GetRoot(), lp);
+        return lp;
     }
 
 };

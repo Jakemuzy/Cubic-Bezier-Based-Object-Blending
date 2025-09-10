@@ -121,6 +121,24 @@ public:
             child->Draw(shader);
         }
     }
+
+    void DrawLeafs(IShader& shader)
+    {
+        // Draw this node
+        if(children.empty())
+        {
+            shader.SetInt("currentDepth", depth);
+            glBindVertexArray(VAO);
+            glDrawElements(GL_TRIANGLES, static_cast<unsigned int>(indices.size()), GL_UNSIGNED_INT, 0);
+            glBindVertexArray(0);
+        }
+        
+        // Draw all children recursively
+        for (auto &child : children)
+        {
+            child->DrawLeafs(shader);
+        }
+    }
 };
 
 class OctreeBridge
@@ -140,6 +158,15 @@ public:
         if (rootNodeBridge)
         {
             rootNodeBridge->Draw(shader);
+        }
+    }
+
+    //  Draw leaf nodes only
+    void DrawLeafs(IShader& shader)
+    {
+        if(rootNodeBridge)
+        {
+            rootNodeBridge->DrawLeafs(shader);
         }
     }
 };

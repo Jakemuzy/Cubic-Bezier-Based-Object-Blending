@@ -26,9 +26,9 @@ class Node
 {
 private:
     Node* parent;
-    std::vector<std::unique_ptr<Node>> children;
+    std::vector<std::shared_ptr<Node>> children;
 
-    int maxTreeDepth = 5;
+    int maxTreeDepth = 3;
 public:
     //  Bounds in world space, verticies in local
     BoundingBox bounds;
@@ -39,7 +39,7 @@ public:
     Node(BoundingBox _bounds, int _currentDepth, std::vector<glm::vec3> _vertices);
 
     void DetermineChildren();
-    std::vector<std::unique_ptr<Node>>& GetChildren() { return children; }
+    std::vector<std::shared_ptr<Node>>& GetChildren() { return children; }
 
     void UpdateBounds(glm::vec3 deltaMovement);
 };
@@ -47,7 +47,7 @@ public:
 class Octree 
 {
 private:
-    std::unique_ptr<Node> root;
+    std::shared_ptr<Node> root;
 public:
     Octree(const std::vector<glm::vec3>& _modelVertices);
     Node* GetRoot() { return root.get(); }

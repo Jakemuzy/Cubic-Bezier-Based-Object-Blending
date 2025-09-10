@@ -33,6 +33,7 @@ private:
     std::unordered_map<std::string, std::unique_ptr<ModelBridge>> modelBridges;
 
     bool drawOctrees = true;
+    bool drawLeafsOnly = true;
 public:
     Scene(IRenderer* _renderer) : renderer(*static_cast<OpenGLRenderer*>(_renderer))
     {
@@ -88,7 +89,10 @@ public:
             renderer.GetShader("OctreeShader")->SetMat4("view", view);
             renderer.GetShader("OctreeShader")->SetMat4("projection", proj);
 
-            modelBridges.find(modelName)->second->DrawOctree(*renderer.GetShader("OctreeShader"));
+            if (drawLeafsOnly)
+                modelBridges.find(modelName)->second->DrawOctreeLeafs(*renderer.GetShader("OctreeShader"));
+            else 
+                modelBridges.find(modelName)->second->DrawOctree(*renderer.GetShader("OctreeShader"));
         }
     }
 
@@ -100,9 +104,9 @@ public:
 
     void CheckIntersections()
     {
-        if (!Collision::CheckCollision(models["backpack"]->octree.get(), models["girl"]->octree.get())->empty())
+        if (!Collision::CheckCollision(models["backpack"]->octree.get(), models["girl"]->octree.get()).empty())
             std::cout << "COLLIDING \n";
-        else 
+        else
             std::cout << "NOT COLLIDING \n";
     }
 };

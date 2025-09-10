@@ -20,6 +20,7 @@ public:
     void AttachModel(Model* _model);
     void Draw(IShader& shader);
     void DrawOctree(IShader& shader);
+    void DrawOctreeLeafs(IShader &shader);
 };
 
 

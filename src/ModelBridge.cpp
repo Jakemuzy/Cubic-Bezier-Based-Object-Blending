@@ -22,3 +22,11 @@ void ModelBridge::DrawOctree(IShader& shader)
         octree->Draw(shader);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
+
+void ModelBridge::DrawOctreeLeafs(IShader& shader)
+{
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    for (auto &octree : octreeBridges)
+        octree->DrawLeafs(shader);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+}

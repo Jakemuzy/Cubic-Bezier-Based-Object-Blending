@@ -6,7 +6,7 @@
 using LeafPair = std::pair<Node*, Node*>;
 using LeafPairs = std::vector<LeafPair>;
 
-static class Collision
+class Collision
 {
 private:
     bool static BoundsIntersect(const BoundingBox& a, const BoundingBox& b)
@@ -20,18 +20,18 @@ private:
         return true;
     }
 
-    void static CompareNodes(Node *a, Node *b, std::unique_ptr<LeafPairs>& lp)
+    void static CompareNodes(Node *a, Node *b, LeafPairs& lp)
     {
         //  Base case, they don't intersect
         if (!BoundsIntersect(a->bounds, b->bounds))
             return;
 
-        auto &aChildren = a->GetChildren(), bChildren = b->GetChildren();
+        std::vector<std::shared_ptr<Node>>& aChildren = a->GetChildren(), bChildren = b->GetChildren();
 
         //  Case 1, both are leaf nodes
         if (aChildren.empty() && bChildren.empty())
         {
-            lp->push_back(std::pair<Node*, Node*>(a, b));
+            lp.push_back(std::pair<Node*, Node*>(a, b));
             return;
         }
 
@@ -68,9 +68,9 @@ private:
 
 public:
     //  Make this shared_ptr, also make this take ModelData struct instead
-    std::unique_ptr<LeafPairs> static CheckCollision(Octree* a, Octree* b)
+    LeafPairs static CheckCollision(Octree* a, Octree* b)
     {
-        std::unique_ptr<LeafPairs> lp = std::make_unique<LeafPairs>();
+        LeafPairs lp;
 
         CompareNodes(a->GetRoot(), b->GetRoot(), lp);
         return lp;

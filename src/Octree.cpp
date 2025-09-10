@@ -43,7 +43,7 @@ void Node::DetermineChildren()
 
         if (!vertsInBox.empty())
         {
-            children.push_back(std::make_unique<Node>(box, currentDepth + 1, vertsInBox));
+            children.push_back(std::make_shared<Node>(box, currentDepth + 1, vertsInBox));
         }
     }
 }
@@ -80,5 +80,5 @@ Octree::Octree(const std::vector<glm::vec3>& modelVertices)
         {xMax, yMax, zMax}};
 
     // make root node
-    root = std::make_unique<Node>(rootBounds, 0, modelVertices);
+    root = std::make_shared<Node>(rootBounds, 0, modelVertices);
 }

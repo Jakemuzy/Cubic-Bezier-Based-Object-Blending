@@ -28,7 +28,7 @@ private:
     Node* parent;
     std::vector<std::shared_ptr<Node>> children;
 
-    int maxTreeDepth = 3;
+    int maxTreeDepth = 5;
 public:
     //  Bounds in world space, verticies in local
     BoundingBox bounds;

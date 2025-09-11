@@ -7,7 +7,7 @@
 int main(void)
 { 
     auto renderer = RendererFactory::CreateOpenGLRenderer();
-    auto cam = CameraFactory::CreateCamera();
+    auto cam = CameraFactory::CreateCamera();   //  Gotta transfer event from input factory to camera for mouse movement
     auto input = InputFactory::CreateInputHandler(renderer.get(), cam.get(), renderer->GetDeltaTime());
 
 
@@ -17,7 +17,7 @@ int main(void)
     renderer->AttachShader("dependencies\\shaders\\Octree.vert", "dependencies\\shaders\\Octree.frag", "OctreeShader");
 
     glm::mat4 backpackModel = glm::mat4(1.0f);
-    glm::mat4 girlModel = glm::translate(backpackModel, glm::vec3(3, -1, 0));
+    glm::mat4 girlModel = glm::translate(backpackModel, glm::vec3(3.0f, -1.0f, -0.5f));
     glm::mat4 projection = glm::perspective((float)glm::radians(60.0f), (float)1920.0f / (float)1080, 0.1f, 100.0f);
 
     glm::vec3 backpackPrevPos = glm::vec3(0.0f);

@@ -21,7 +21,7 @@ class InputFactory
 public:
     static std::unique_ptr<IInput> CreateInputHandler(IRenderer* renderer, ICamera* camera, const float* deltaTime)
     {
-        auto input = std::make_unique<InputHandler>(renderer);
+        auto input = std::make_unique<InputHandler>(renderer, camera);
 
         GLFWwindow *window = static_cast<GLFWwindow*>(renderer->GetWindow()->GetNativeHandle());
         Camera* cam = static_cast<Camera*>(camera);

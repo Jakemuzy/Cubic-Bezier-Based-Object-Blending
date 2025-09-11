@@ -1,11 +1,19 @@
 #include "InputHandler.h"
 
-InputHandler::InputHandler(IRenderer* gr) : window(static_cast<GLFWwindow*>(gr->GetWindow()->GetNativeHandle())) 
+InputHandler::InputHandler(IRenderer* gr, ICamera* cam) : window(static_cast<GLFWwindow*>(gr->GetWindow()->GetNativeHandle())) 
 {
     glfwSetWindowUserPointer(window, this);
 
     OpenGLRenderer *glRender = static_cast<OpenGLRenderer*>(gr);
     glRender->AttachMouseCallback(MouseCallbackTrampoline);
+
+    //  Attach this event
+    MouseFunctions.Subscribe( [cam](float xOffset, float yOffset)
+        {
+            cam->ProcessMouseMovement(xOffset, yOffset, true);
+        }
+    );
+    
 }
 
 void InputHandler::AttachKeyEvent(std::function<void()> _function, unsigned int GLKey)

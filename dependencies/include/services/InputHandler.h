@@ -6,8 +6,9 @@
 #include <GLFW/glfw3.h>
 
 #include "IRenderer.h"
-#include "OpenGLRenderer.h"
 #include "IInput.h"
+#include "ICamera.h"
+#include "OpenGLRenderer.h"
 
 /*
     Singleton to handle all the user input 
@@ -20,7 +21,6 @@ private:
     Event<> KeyboardFunctions;
     Event<float, float> MouseFunctions;
     bool initalized = false;
-
     
     void HandleMouseMovement(double x, double y)
     {
@@ -35,6 +35,8 @@ private:
         float yoffset = lastY - y;
         lastX = x;
         lastY = y;
+
+        MouseFunctions.RaiseEvent(xoffset, yoffset);
     }
 
     //  Need this to bridge the gap
@@ -54,7 +56,7 @@ public:
     float lastX = 400, lastY = 300;
 
     InputHandler() { initalized = false; }   //  Make these processes error if trying to use while not inialized
-    InputHandler(IRenderer* gr);
+    InputHandler(IRenderer* gr, ICamera* cam);
 
     void AttachKeyEvent(std::function<void()> _function, unsigned int GLKey) override;
     MousePos GetMousePos() override;

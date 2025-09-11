@@ -9,15 +9,12 @@ using LeafPairs = std::vector<LeafPair>;
 class Collision
 {
 private:
+
     bool static BoundsIntersect(const BoundingBox& a, const BoundingBox& b)
     {
-        if (!(a.min.x <= b.max.x) || !(a.max.x >= b.min.x))
-            return false;
-        if (!(a.min.y <= b.max.y) || !(a.max.y >= b.min.y))
-            return false;
-        if (!(a.min.z <= b.max.z) || !(a.max.z >= b.min.z))
-            return false;
-        return true;
+        return (a.min.x <= b.max.x && a.max.x >= b.min.x) &&
+               (a.min.y <= b.max.y && a.max.y >= b.min.y) &&
+               (a.min.z <= b.max.z && a.max.z >= b.min.z);
     }
 
     void static CompareNodes(Node *a, Node *b, LeafPairs& lp)

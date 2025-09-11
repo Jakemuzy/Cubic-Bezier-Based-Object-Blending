@@ -106,8 +106,10 @@ public:
     {
         if (!Collision::CheckCollision(models["backpack"]->octree.get(), models["girl"]->octree.get()).empty())
             std::cout << "COLLIDING \n";
+        /*
         else
             std::cout << "NOT COLLIDING \n";
+        */
     }
 };
 

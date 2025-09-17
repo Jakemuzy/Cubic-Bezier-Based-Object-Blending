@@ -2,16 +2,18 @@
 
 Mesh::Mesh(std::vector<Vertex> _vertices, std::vector<unsigned int> _indices, std::vector<Texture> _textures)
 {
-    this->vertices = _vertices;
-    this->indices = _indices;
-    this->textures = _textures;
+    vertices = _vertices;
+    indices = _indices;
+    textures = _textures;
 
-    //  SetupMesh();
-    //  INSTEAD of setting up mesh's here, just have the MeshBridge get the mesh data and setup mesh's there
+    SetupTriangles();
 }
 
-
-
+void Mesh::SetupTriangles()
+{
+    for (int i = 0; i < indices.size(); i += 3)
+        triangles.emplace_back(vertices[indices[i]], vertices[indices[i + 1]], vertices[indices[i + 2]]);
+}
 
 unsigned int TextureFromFile(const char *path, const std::string &directory, bool gamma)
 {

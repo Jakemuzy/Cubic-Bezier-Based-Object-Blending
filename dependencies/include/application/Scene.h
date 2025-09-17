@@ -11,6 +11,8 @@
 
 #include "CollisionDetection.h"
 
+using LeafPair = std::pair<Node *, Node *>;
+using LeafPairs = std::vector<LeafPair>;
 
 struct ModelData
 {
@@ -39,7 +41,7 @@ public:
     {
         
         models["backpack"] = std::make_unique<Model>(
-            "C:\\Users\\jmuzy\\OneDrive\\Desktop\\Projects\\Object Blending\\backpack",
+            "C:\\Users\\jmuzy\\OneDrive\\Desktop\\Projects\\Object Blending\\models\\backpack",
             "\\backpack.obj"
         );
 
@@ -48,7 +50,7 @@ public:
         modelBridges["backpack"] = std::move(mb);
 
         models["girl"] = std::make_unique<Model>(
-            "C:\\Users\\jmuzy\\OneDrive\\Desktop\\Projects\\Object Blending\\girl",
+            "C:\\Users\\jmuzy\\OneDrive\\Desktop\\Projects\\Object Blending\\models\\girl",
             "\\girl.obj"
         );
         
@@ -104,8 +106,13 @@ public:
 
     void CheckIntersections()
     {
-        if (!Collision::CheckCollision(models["backpack"]->octree.get(), models["girl"]->octree.get()).empty())
-            std::cout << "COLLIDING \n";
+        auto& nodes = Collision::CheckCollision(models["backpack"]->octree.get(), models["girl"]->octree.get());
+        int i = 0;
+        for (auto &node : nodes)
+        {
+            node.first->onIntersection.RaiseEvent(true);
+            node.second->onIntersection.RaiseEvent(true);        
+        }
         /*
         else
             std::cout << "NOT COLLIDING \n";

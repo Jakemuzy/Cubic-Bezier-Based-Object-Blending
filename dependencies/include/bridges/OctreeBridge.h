@@ -20,6 +20,8 @@ private:
 
     int depth;
 public:
+    bool intersected = false;
+
     unsigned int VAO;
 
     NodeBridge(Node* node, int _depth) : depth(_depth)
@@ -32,6 +34,10 @@ public:
         {
             children.push_back(std::make_unique<NodeBridge>(child.get(), depth + 1));
         }
+
+        //  Intersection Event
+        node->onIntersection.Subscribe([&](bool state)
+                                 { intersected = state; });
     }
 
     ~NodeBridge()
@@ -128,6 +134,8 @@ public:
         if(children.empty())
         {
             shader.SetInt("currentDepth", depth);
+            shader.SetBool("intersected", intersected);
+
             glBindVertexArray(VAO);
             glDrawElements(GL_TRIANGLES, static_cast<unsigned int>(indices.size()), GL_UNSIGNED_INT, 0);
             glBindVertexArray(0);

@@ -1,6 +1,7 @@
 #ifndef _COLLISION_DETECTION_H__
 #define _COLLISION_DETECTION_H__
 
+#include "Structs.h"
 #include "Octree.h"
 
 using LeafPair = std::pair<Node*, Node*>;

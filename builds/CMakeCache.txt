@@ -17,10 +17,6 @@
 //Path to a program.
 CMAKE_AR:FILEPATH=C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/lib.exe
 
-//For backwards compatibility, what version of CMake commands and
-// syntax should this version of CMake try to support.
-CMAKE_BACKWARDS_COMPATIBILITY:STRING=2.4
-
 //Semicolon separated list of supported configuration types, only
 // supports Debug, Release, MinSizeRel, and RelWithDebInfo, anything
 // else will be ignored.
@@ -81,7 +77,7 @@ CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO:STRING=/debug /INCREMENTAL
 CMAKE_FIND_PACKAGE_REDIRECTS_DIR:STATIC=C:/Users/jmuzy/OneDrive/Desktop/Projects/Object Blending/builds/CMakeFiles/pkgRedirects
 
 //Install path prefix, prepended onto install directories.
-CMAKE_INSTALL_PREFIX:PATH=C:/Program Files (x86)/Minecraft
+CMAKE_INSTALL_PREFIX:PATH=C:/Program Files (x86)/ObjectBlend
 
 //Path to a program.
 CMAKE_LINKER:FILEPATH=C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/link.exe
@@ -189,21 +185,6 @@ CMAKE_STATIC_LINKER_FLAGS_RELWITHDEBINFO:STRING=
 // Studio IDE projects all commands are done without /nologo.
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 
-//Single output directory for building all executables.
-EXECUTABLE_OUTPUT_PATH:PATH=
-
-//Single output directory for building all libraries.
-LIBRARY_OUTPUT_PATH:PATH=
-
-//Value Computed by CMake
-Minecraft_BINARY_DIR:STATIC=C:/Users/jmuzy/OneDrive/Desktop/Projects/Object Blending/builds
-
-//Value Computed by CMake
-Minecraft_IS_TOP_LEVEL:STATIC=ON
-
-//Value Computed by CMake
-Minecraft_SOURCE_DIR:STATIC=C:/Users/jmuzy/OneDrive/Desktop/Projects/Object Blending
-
 //OpenGL library for win32
 OPENGL_gl_LIBRARY:STRING=opengl32
 
@@ -218,15 +199,6 @@ ObjectBlend_IS_TOP_LEVEL:STATIC=ON
 
 //Value Computed by CMake
 ObjectBlend_SOURCE_DIR:STATIC=C:/Users/jmuzy/OneDrive/Desktop/Projects/Object Blending
-
-//Value Computed by CMake
-Project_BINARY_DIR:STATIC=C:/Users/jmuzy/OneDrive/Desktop/Projects/Object Blending/builds
-
-//Value Computed by CMake
-Project_IS_TOP_LEVEL:STATIC=ON
-
-//Value Computed by CMake
-Project_SOURCE_DIR:STATIC=C:/Users/jmuzy/OneDrive/Desktop/Projects/Object Blending
 
 
 ########################

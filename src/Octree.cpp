@@ -1,6 +1,6 @@
 #include "Octree.h"
 
-Node::Node(BoundingBox _bounds, int _currentDepth, std::vector<glm::vec3> _vertices) : bounds(_bounds), currentDepth(_currentDepth), vertices(_vertices)
+Node::Node(BoundingBox _bounds, int _currentDepth, std::vector<Triangle> &_triangles) : bounds(_bounds), currentDepth(_currentDepth), triangles(&_triangles)
 {
     DetermineChildren();
 }
@@ -27,23 +27,19 @@ void Node::DetermineChildren()
         BoundingBox{{midX, midY, midZ}, bounds.max}                                  // RTF
     };
 
+    //  Determine trianlges intersecting the node
     for (auto &box : subBoxes)
     {
-        // filter vertices inside box
-        std::vector<glm::vec3> vertsInBox;
-        for (auto &v : vertices)
+        std::vector<Triangle> trisInNode;
+        for (auto &tri : *triangles)
         {
-            if (v.x >= box.min.x && v.x <= box.max.x &&
-                v.y >= box.min.y && v.y <= box.max.y &&
-                v.z >= box.min.z && v.z <= box.max.z)
-            {
-                vertsInBox.push_back(v);
-            }
+            if (SAT(bounds, tri))
+                trisInNode.push_back(tri);
         }
 
-        if (!vertsInBox.empty())
+        if (!trisInNode.empty())
         {
-            children.push_back(std::make_shared<Node>(box, currentDepth + 1, vertsInBox));
+            children.push_back(std::make_shared<Node>(box, currentDepth + 1, trisInNode));
         }
     }
 }
@@ -53,26 +49,33 @@ void Node::UpdateBounds(glm::vec3 deltaMovement)
     bounds.min += deltaMovement;
     bounds.max += deltaMovement;
 
-    for(auto& child : children)
+    for (auto &child : children)
     {
         child->UpdateBounds(deltaMovement);
     }
 }
 
-Octree::Octree(const std::vector<glm::vec3>& modelVertices)
+Octree::Octree(std::vector<Triangle> &_modelTriangles)
 {
     float xMin = FLT_MAX, xMax = -FLT_MAX;
     float yMin = FLT_MAX, yMax = -FLT_MAX;
     float zMin = FLT_MAX, zMax = -FLT_MAX;
 
-    for (auto &pos : modelVertices)
+    std::function compareMinMax([&](const Vertex *v)
+                                {
+            xMin = std::min(xMin, v->Position.x);
+            xMax = std::max(xMax, v->Position.x);
+            yMin = std::min(yMin, v->Position.y);
+            yMax = std::max(yMax, v->Position.y);
+            zMin = std::min(zMin, v->Position.z);
+            zMax = std::max(zMax, v->Position.z); });
+
+    //  Actually copmare
+    for (const auto &vert : _modelTriangles)
     {
-        xMin = std::min(xMin, pos.x);
-        xMax = std::max(xMax, pos.x);
-        yMin = std::min(yMin, pos.y);
-        yMax = std::max(yMax, pos.y);
-        zMin = std::min(zMin, pos.z);
-        zMax = std::max(zMax, pos.z);
+        compareMinMax(vert.v0);
+        compareMinMax(vert.v1);
+        compareMinMax(vert.v2);
     }
 
     BoundingBox rootBounds{
@@ -80,5 +83,5 @@ Octree::Octree(const std::vector<glm::vec3>& modelVertices)
         {xMax, yMax, zMax}};
 
     // make root node
-    root = std::make_shared<Node>(rootBounds, 0, modelVertices);
+    root = std::make_shared<Node>(rootBounds, 0, _modelTriangles);
 }

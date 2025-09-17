@@ -19,26 +19,6 @@
 
 unsigned int TextureFromFile(const char *path, const std::string &directory, bool gamma = false);
 
-struct Vertex
-{
-    glm::vec3 Position;
-    glm::vec3 Normal;
-    glm::vec2 TexCoords;
-    glm::vec3 Tangent;
-    glm::vec3 Bitangent;
-    // bone indexes which will influence this vertex
-    int m_BoneIDs[MAX_BONE_INFLUENCE];
-    // weights from each bone
-    float m_Weights[MAX_BONE_INFLUENCE];
-};
-
-struct Texture
-{
-    unsigned int id;
-    std::string type;
-    std::string path;
-};
-
 class Mesh
 {
 private:
@@ -46,12 +26,16 @@ private:
 
 public:
     std::vector<Vertex> vertices;
-    std::vector<unsigned int> indices;
+    std::vector<Triangle> triangles;
     std::vector<Texture> textures;
+    std::vector<unsigned int> indices;
 
     Mesh(std::vector<Vertex> _vertices, std::vector<unsigned int> _indices, std::vector<Texture> _textures);
 
+    void SetupTriangles();
+
     std::vector<Vertex>& GetVertices() { return vertices; }
+    std::vector<Triangle>& GetTriangles() { return triangles; }
     std::vector<unsigned int>& GetIndices() { return indices; }
     std::vector<Texture>& GetTextures() { return textures; }
 };

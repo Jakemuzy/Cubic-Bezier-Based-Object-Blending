@@ -25,6 +25,7 @@ public:
     Event<glm::vec3> modelUpdated;
     //  Realistically should be shared ptr
     std::unique_ptr<Octree> octree = nullptr;
+    std::vector<Triangle> modelTriangles;
 
     Model(const char *path, std::string objName);
 

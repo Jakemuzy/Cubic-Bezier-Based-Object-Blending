@@ -11,24 +11,20 @@ Model::Model(const char *path, std::string objName)
     );
 }
 
+//  Gather triangles from all meshes, and then create octree based off of them
 void Model::InitalizeOctree()
 {
-    std::vector<glm::vec3> vertexPositions;
+    size_t totalTriangles = 0;
+    for(const auto& mesh : meshes)
+        totalTriangles += mesh.triangles.size();
 
-    size_t total = 0;
-    for (const auto &mesh : meshes)
-        total += mesh.vertices.size();
-    vertexPositions.reserve(total);
-
-    for (const auto &mesh : meshes)
+    for (auto& mesh : meshes)
     {
-        for (const auto &vertex : mesh.vertices)
-        {
-            vertexPositions.emplace_back(vertex.Position);
-        }
+        //  Append mesh triangles to model modelTriangles
+        modelTriangles.insert(modelTriangles.end(), mesh.triangles.begin(), mesh.triangles.end());
     }
 
-    octree = std::make_unique<Octree>(vertexPositions);
+    octree = std::make_unique<Octree>(modelTriangles);
 }
 
 void Model::LoadModel(std::string path, std::string objName)

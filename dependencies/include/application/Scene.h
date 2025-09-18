@@ -79,7 +79,9 @@ public:
         renderer.GetShader("ModelShader")->SetMat4("view", view);
         renderer.GetShader("ModelShader")->SetMat4("projection", proj);
 
-        modelBridges.find(modelName)->second->Draw(*renderer.GetShader("BlockShader"));
+        auto currentModel = &modelBridges.find(modelName)->second;
+        if (!currentModel->get()->hidden)
+            currentModel->get()->Draw(*renderer.GetShader("BlockShader"));
 
         //  Updates models octree based on model matrix, ideally cache this so it isn't updated per frame
         //models.find(modelName)->second->modelUpdated.RaiseEvent(model);

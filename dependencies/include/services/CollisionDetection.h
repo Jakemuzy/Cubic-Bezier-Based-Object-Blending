@@ -2,7 +2,7 @@
 #define _COLLISION_DETECTION_H__
 
 #include "Structs.h"
-#include "Octree.h"
+#include "shapes/Octree.h"
 
 using LeafPair = std::pair<Node*, Node*>;
 using LeafPairs = std::vector<LeafPair>;

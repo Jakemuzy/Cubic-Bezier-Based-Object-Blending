@@ -5,8 +5,8 @@
 #include <memory>
 
 #include "Shader.h"
-#include "Octree.h"
 #include "OpenGLRenderer.h"
+#include "shapes/Octree.h"
 
 //  TEMPORARILY here for now until we set up a bridge
 class NodeBridge

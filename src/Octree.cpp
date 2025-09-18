@@ -1,4 +1,4 @@
-#include "Octree.h"
+#include "shapes/Octree.h"
 
 Node::Node(BoundingBox _bounds, int _currentDepth, std::vector<Triangle> &_triangles) : bounds(_bounds), currentDepth(_currentDepth), triangles(&_triangles)
 {

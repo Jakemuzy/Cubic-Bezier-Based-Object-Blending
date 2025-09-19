@@ -27,6 +27,7 @@ public:
     std::unique_ptr<Octree> octree = nullptr;
     std::vector<Triangle> modelTriangles;
 
+    Model() = default;
     Model(const char *path, std::string objName);
 
     std::vector<Mesh>& GetMeshes() { return meshes; }

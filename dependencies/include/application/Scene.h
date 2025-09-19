@@ -2,12 +2,16 @@
 #define _SCENE_H__
 
 #include <vector>
+#include <filesystem>
 #include <unordered_map>
 
-#include "Shapes/Model.h"
+#include "shapes/Model.h"
+#include "shapes/BlendedModel.h"
 #include "ModelBridge.h"
 
 #include "IRenderer.h"
+#include "ICamera.h"
+#include "IInput.h"
 
 #include "CollisionDetection.h"
 
@@ -34,7 +38,7 @@ private:
         prevPos = currentPos;
     }
 public:
-    glm::mat4 transform = glm::mat4(1.0f);
+    glm::mat4 transform;
     const glm::mat4 *view; //  shared ptrs
     const glm::mat4 *proj;
 
@@ -42,20 +46,21 @@ public:
 
     ModelData(std::string name, glm::mat4 _transform, glm::mat4* _view, glm::mat4* _proj) : modelName(name), transform(_transform), view(_view), proj(_proj)
     {
-        std::string path = "C:\\Users\\jmuzy\\OneDrive\\Desktop\\Projects\\Object Blending\\models\\" + name + "\\";
-        std::string fileName = name + ".obj";
+        std::filesystem::path path = std::filesystem::current_path() / "models" / name;
+        std::string fileName = "\\" + name + ".obj";
 
-        model = std::make_unique<Model>( path.c_str(), fileName );
+        model = std::make_unique<Model>( path.string().c_str(), fileName );
         modelBridge = std::make_unique<ModelBridge>();
         modelBridge->AttachModel(model.get());
 
         //  Updates position data that was already pregenerated from model
         prevPos = glm::vec3(transform[3]);
+        model->modelUpdated.RaiseEvent(transform[3]);
     }
 
     void Translate(float deltaTime, glm::vec3 translation)
     {
-        transform = glm::translate(transform, translation * deltaTime);
+        transform = glm::translate(transform, deltaTime * translation);
         UpdateOctree();
     }
 
@@ -144,7 +149,7 @@ public:
     void CheckIntersections()
     {
         //  Octrees are messed up for girl
-        auto &nodes = Collision::CheckCollision(models["backpack"].get()->GetOctree(), models["girl"].get()->GetOctree());
+        auto nodes = Collision::CheckCollision(models["backpack"].get()->GetOctree(), models["girl"].get()->GetOctree());
         //modelBlend["backpackgirl"] = nodes;
 
         //  Not hidden until collision occurs
@@ -156,8 +161,8 @@ public:
             node.second->onIntersection.RaiseEvent(true);
 
             //  Hide model and then generate new model (MAKE THIS EVENT DRIVEN)
-            //models["backpack"]->SetHidden(true);
-            //models["girl"]->SetHidden(true);
+            models["backpack"]->SetHidden(true);
+            models["girl"]->SetHidden(true);
         }
     }
 

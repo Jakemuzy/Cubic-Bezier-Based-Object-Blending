@@ -5,8 +5,8 @@
 #include <memory>
 
 #include "Shader.h"
-#include "Octree.h"
 #include "OpenGLRenderer.h"
+#include "shapes/Octree.h"
 
 //  TEMPORARILY here for now until we set up a bridge
 class NodeBridge
@@ -19,6 +19,7 @@ private:
     std::vector<unsigned int> indices;
 
     int depth;
+    bool intersectedLastFrame = false;
 public:
     bool intersected = false;
 
@@ -36,8 +37,10 @@ public:
         }
 
         //  Intersection Event
-        node->onIntersection.Subscribe([&](bool state)
-                                 { intersected = state; });
+        node->onIntersection.Subscribe([&](bool state) {
+             intersected = state; 
+             intersectedLastFrame = state;
+        });
     }
 
     ~NodeBridge()
@@ -126,6 +129,12 @@ public:
         {
             child->Draw(shader);
         }
+
+        //  Collision visual logic
+        if(intersectedLastFrame)
+        {
+            intersected = intersectedLastFrame = false;
+        }
     }
 
     void DrawLeafs(IShader& shader)
@@ -145,6 +154,12 @@ public:
         for (auto &child : children)
         {
             child->DrawLeafs(shader);
+        }
+
+        //  Collision visual logic
+        if (intersectedLastFrame)
+        {
+            intersected = intersectedLastFrame = false;
         }
     }
 };

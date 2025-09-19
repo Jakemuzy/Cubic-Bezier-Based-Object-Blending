@@ -6,7 +6,7 @@ Camera::Camera(glm::vec3 position = glm::vec3(0.0f, -2.0f, 0.0f), glm::vec3 up =
     WorldUp = up;
     Yaw = yaw;
     Pitch = pitch;
-    updateCameraVectors();
+    UpdateCameraVectors();
 }
 
 Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch) : Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM)
@@ -15,13 +15,9 @@ Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float u
     WorldUp = glm::vec3(upX, upY, upZ);
     Yaw = yaw;
     Pitch = pitch;
-    updateCameraVectors();
+    UpdateCameraVectors();
 }
 
-glm::mat4 Camera::GetViewMatrix()
-{
-    return glm::lookAt(Position, Position + Front, Up);
-}
 
 void Camera::ProcessKeyboard(Camera_Movement direction, float deltaTime)
 {
@@ -57,10 +53,10 @@ void Camera::ProcessMouseMovement(float xoffset, float yoffset, bool constrainPi
     }
 
     // update Front, Right and Up Vectors using the updated Euler angles
-    updateCameraVectors();
+    UpdateCameraVectors();
 }
 
-void Camera::updateCameraVectors()
+void Camera::UpdateCameraVectors()
 {
     // calculate the new Front vector
     glm::vec3 front;

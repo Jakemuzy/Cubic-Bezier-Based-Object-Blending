@@ -11,12 +11,18 @@ void ModelBridge::AttachModel(Model* _model)
 
 void ModelBridge::Draw(IShader& shader)
 {
+    if (hidden)
+        return;
+
     for (auto &mesh : meshBridges)
         mesh.Draw(shader);
 }
 
 void ModelBridge::DrawOctree(IShader& shader)
 {
+    if (hidden)
+        return;
+
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     for(auto& octree : octreeBridges)
         octree->Draw(shader);
@@ -25,6 +31,9 @@ void ModelBridge::DrawOctree(IShader& shader)
 
 void ModelBridge::DrawOctreeLeafs(IShader& shader)
 {
+    if (hidden)
+        return;
+
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     for (auto &octree : octreeBridges)
         octree->DrawLeafs(shader);

@@ -23,14 +23,13 @@ private:
     Node* parent;
     std::vector<std::shared_ptr<Node>> children;
 
-    int maxTreeDepth = 3;
+    int maxTreeDepth = 1;
 public:
     //  Bounds in world space, verticies in local
     BoundingBox bounds;
     std::vector<Triangle>* triangles;
 
     Event<bool> onIntersection;
-    bool intersected = false;
     int currentDepth = 1;
 
 

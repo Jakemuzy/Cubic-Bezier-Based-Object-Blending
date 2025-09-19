@@ -21,13 +21,12 @@ const float ZOOM = 45.0f;
 class Camera : public ICamera
 {
 private:
-    void updateCameraVectors();
+    void UpdateCameraVectors();
+
+    glm::mat4 proj = glm::perspective((float)glm::radians(60.0f), (float)1920.0f / (float)1080, 0.1f, 100.0f);
+    glm::mat4 view;
 public:
-    glm::vec3 Position;
-    glm::vec3 Front;
-    glm::vec3 Up;
-    glm::vec3 Right;
-    glm::vec3 WorldUp;
+    glm::vec3 Position, Front, Up, Right, WorldUp;
 
     float Yaw;
     float Pitch;
@@ -40,11 +39,15 @@ public:
     Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch);
     Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch);
 
-    glm::mat4 GetViewMatrix();
+    glm::mat4 GetViewMatrix() { return view; }
+    glm::mat4 GetProjMatrix() { return proj; }
+    glm::mat4* GetViewMatrixPtr() { return &view; }
+    glm::mat4* GetProjMatrixPtr() { return &proj; }
 
     void ProcessKeyboard(Camera_Movement direction, float deltaTime) override;
     void ProcessMouseMovement(float xoffset, float yoffset, bool constrainPitch) override;
 
+    void Update() { view = glm::lookAt(Position, Position + Front, Up); }
 };
 
 #endif

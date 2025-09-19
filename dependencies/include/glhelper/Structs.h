@@ -7,6 +7,9 @@
 
 #include <iostream>
 
+
+//  Raw data structs
+
 struct Vertex
 {
     glm::vec3 Position;
@@ -36,5 +39,8 @@ struct BoundingBox
     glm::vec3 min;
     glm::vec3 max;
 };
+
+//  
+
 
 #endif 

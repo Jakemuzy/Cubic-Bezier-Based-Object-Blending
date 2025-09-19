@@ -6,7 +6,9 @@
 /*
     File for general intersction detection between two shapes 
     of unknown dimensions / complexity. Achieved through the use
-    of Separation Axis Theory.
+    of Separation Axis Theory. Currently only supports triangle
+    and cube intersection and is highly simplified due to computation
+    speeds.
 */
 
 static std::pair<float, float> ProjectOnAxis(const glm::vec3 &axis, const std::vector<glm::vec3> &vertices)
@@ -93,54 +95,69 @@ static std::vector<glm::vec3> CalculateTriangleEdges(const Triangle &tri)
 //  Separation Axis Theory for cube and triangle 
 static bool SAT(const BoundingBox& cube, const Triangle& tri)
 {
-    // Collect vertices from both structures
-    std::vector<glm::vec3> cubeVerts = GetBoxVertices(cube); 
-    std::vector<glm::vec3> triVerts = {tri.v0->Position, tri.v1->Position, tri.v2->Position};
+    glm::vec3 cubeVerts[8] = {
+        {cube.min.x, cube.min.y, cube.min.z},
+        {cube.max.x, cube.min.y, cube.min.z},
+        {cube.max.x, cube.max.y, cube.min.z},
+        {cube.min.x, cube.max.y, cube.min.z},
+        {cube.min.x, cube.min.y, cube.max.z},
+        {cube.max.x, cube.min.y, cube.max.z},
+        {cube.max.x, cube.max.y, cube.max.z},
+        {cube.min.x, cube.max.y, cube.max.z},
+    };
+    glm::vec3 triVerts[3] = {
+        tri.v0->Position, tri.v1->Position, tri.v2->Position
+    };
 
     // All Axes to compare
-    std::vector<glm::vec3> axes;
+    glm::vec3 axes[4] = {
+        // Cube face normals (since axis-aligned)
+        glm::vec3(1, 0, 0),
+        glm::vec3(0, 1, 0),
+        glm::vec3(0, 0, 1),
+        //  Triangle face
+        glm::cross(tri.v1->Position - tri.v0->Position, tri.v2->Position - tri.v0->Position)
+    };
 
-    // Cube face normals (since axis-aligned)
-    axes.push_back(glm::vec3(1, 0, 0));
-    axes.push_back(glm::vec3(0, 1, 0));
-    axes.push_back(glm::vec3(0, 0, 1));
 
-    // Triangle face normal
-    glm::vec3 triNormal = glm::cross(tri.v1->Position - tri.v0->Position,
-                                     tri.v2->Position - tri.v0->Position);
-    if (glm::length(triNormal) > 1e-6f) 
-        axes.push_back(triNormal);
-
-    // Cross Products not really necessary for octrees
-    /*
-    auto cubeEdges = CalculateCubeEdges(cube);
-    auto triEdges = CalculateTriangleEdges(tri);
-    for (auto &ec : cubeEdges)
+    for (int i = 0; i < 4; i++)
     {
-        for (auto &et : triEdges)
+        glm::vec3 axis = axes[i];
+
+        if (axis.length() < 1e-12f)
+            continue;
+
+        // Project cube
+        float minCube = glm::dot(cubeVerts[0], axis);
+        float maxCube = minCube;
+        for (int i = 1; i < 8; ++i)
         {
-            glm::vec3 axis = glm::cross(ec, et);
-            if (glm::length(axis) > 1e-6f)
-                axes.push_back(glm::normalize(axis));
+            float p = glm::dot(cubeVerts[i], axis);
+            if (p < minCube)
+                minCube = p;
+            if (p > maxCube)
+                maxCube = p;
         }
-    }
-    */
 
-    // Test all the axis's 
-    for (auto &axis : axes)
-    {
-        auto [minCube, maxCube] = ProjectOnAxis(axis, cubeVerts);
-        auto [minTri, maxTri] = ProjectOnAxis(axis, triVerts);
+        // Project triangle
+        float minTri = glm::dot(triVerts[0], axis);
+        float maxTri = minTri;
+        for (int i = 1; i < 3; ++i)
+        {
+            float p = glm::dot(triVerts[i], axis);
+            if (p < minTri)
+                minTri = p;
+            if (p > maxTri)
+                maxTri = p;
+        }
 
+        // Separating axis?
         if (maxCube < minTri || maxTri < minCube)
-        {
-            // separating axis found so no collision
-            return false;
-        }
+            return false;   //  no intersection
     }
 
-    // no separating axis found so intersection
-    return true;
+
+    return true;    // intersection
 }
 
 

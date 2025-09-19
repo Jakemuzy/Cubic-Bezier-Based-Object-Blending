@@ -14,49 +14,125 @@
 using LeafPair = std::pair<Node *, Node *>;
 using LeafPairs = std::vector<LeafPair>;
 
+//  General structure for all data relating to a model
 struct ModelData
 {
-    glm::mat4 modelTransform = glm::mat4(1.0f);
-    glm::mat4* view;    //  shared ptrs 
-    glm::mat4* proj;
-
-    std::string modelName;
+private:
+    glm::vec3 prevPos;
 
     std::unique_ptr<Model> model;
     std::unique_ptr<ModelBridge> modelBridge;
+
+    bool drawOctree = true, drawLeafNodesOnly = true;
+
+    void UpdateOctree()
+    {
+        glm::vec3 currentPos = glm::vec3(transform[3]); // extract translation
+        glm::vec3 deltaMovement = currentPos - prevPos;
+
+        model->modelUpdated.RaiseEvent(deltaMovement);
+        prevPos = currentPos;
+    }
+public:
+    glm::mat4 transform = glm::mat4(1.0f);
+    const glm::mat4 *view; //  shared ptrs
+    const glm::mat4 *proj;
+
+    std::string modelName;
+
+    ModelData(std::string name, glm::mat4 _transform, glm::mat4* _view, glm::mat4* _proj) : modelName(name), transform(_transform), view(_view), proj(_proj)
+    {
+        std::string path = "C:\\Users\\jmuzy\\OneDrive\\Desktop\\Projects\\Object Blending\\models\\" + name + "\\";
+        std::string fileName = name + ".obj";
+
+        model = std::make_unique<Model>( path.c_str(), fileName );
+        modelBridge = std::make_unique<ModelBridge>();
+        modelBridge->AttachModel(model.get());
+
+        //  Updates position data that was already pregenerated from model
+        prevPos = glm::vec3(transform[3]);
+    }
+
+    void Translate(float deltaTime, glm::vec3 translation)
+    {
+        transform = glm::translate(transform, translation * deltaTime);
+        UpdateOctree();
+    }
+
+    void Draw(OpenGLRenderer &renderer)
+    {
+        renderer.UseShader("ModelShader");
+
+        renderer.GetShader("ModelShader")->SetMat4("model", transform);
+        renderer.GetShader("ModelShader")->SetMat4("view", *view);
+        renderer.GetShader("ModelShader")->SetMat4("projection", *proj);
+
+        modelBridge->Draw(*renderer.GetShader("ModelShader"));
+
+        if (drawOctree)
+        {
+            renderer.UseShader("OctreeShader");
+            renderer.GetShader("OctreeShader")->SetMat4("model", transform);
+            renderer.GetShader("OctreeShader")->SetMat4("view", *view);
+            renderer.GetShader("OctreeShader")->SetMat4("projection", *proj);
+
+            if (drawLeafNodesOnly)
+                modelBridge->DrawOctreeLeafs(*renderer.GetShader("OctreeShader"));
+            else
+                modelBridge->DrawOctree(*renderer.GetShader("OctreeShader"));
+        }
+    }
+
+    Octree* GetOctree()
+    {
+        return model.get()->octree.get();
+    }
+
+    void SetHidden(bool hiddenState)
+    {
+        modelBridge.get()->hidden = hiddenState;
+    }
 };
+
+using ModelMap = std::unordered_map<std::string, std::unique_ptr<ModelData>>;
+
+
+
+
 
 class Scene
 {
 private:
     OpenGLRenderer& renderer;
 
-    std::unordered_map<std::string, std::unique_ptr<Model>> models;
-    std::unordered_map<std::string, std::unique_ptr<ModelBridge>> modelBridges;
+    ModelMap models;
+    std::unordered_map<std::string, LeafPairs> modelBlend;
 
-    bool drawOctrees = true;
-    bool drawLeafsOnly = true;
-public:
-    Scene(IRenderer* _renderer) : renderer(*static_cast<OpenGLRenderer*>(_renderer))
+    void AddModel(std::string name, glm::mat4 _trans, glm::mat4* _view, glm::mat4* _proj)
     {
-        
-        models["backpack"] = std::make_unique<Model>(
-            "C:\\Users\\jmuzy\\OneDrive\\Desktop\\Projects\\Object Blending\\models\\backpack",
-            "\\backpack.obj"
-        );
+        //  Must have a correct file path of \\name\\name.obj
+        models[name] = std::make_unique<ModelData>(name, _trans, _view, _proj);
+    }
 
-        auto mb = std::make_unique<ModelBridge>();
-        mb->AttachModel(models["backpack"].get());
-        modelBridges["backpack"] = std::move(mb);
+public:
+    Scene(IRenderer* _renderer, ICamera* _cam, IInput* _input) : renderer(*static_cast<OpenGLRenderer*>(_renderer))
+    {
+        auto view = _cam->GetViewMatrixPtr();
+        auto proj = _cam->GetProjMatrixPtr();
 
-        models["girl"] = std::make_unique<Model>(
-            "C:\\Users\\jmuzy\\OneDrive\\Desktop\\Projects\\Object Blending\\models\\girl",
-            "\\girl.obj"
-        );
-        
-        auto mb2 = std::make_unique<ModelBridge>();
-        mb2->AttachModel(models["girl"].get());
-        modelBridges["girl"] = std::move(mb2);
+        AddModel("backpack", glm::mat4(1.0f), view, proj);
+        AddModel("girl", glm::translate(glm::mat4(1.0f), glm::vec3(3.0f, -1.0f, -0.5f)), view, proj);
+
+        //  Update octree if it moves, same with model pos
+        std::function<void()> leftMove = [&] { models["backpack"]->Translate(*renderer.GetDeltaTime(), glm::vec3(-2.0, 0, 0)); };
+        std::function<void()> rightMove = [&] { models["backpack"]->Translate(*renderer.GetDeltaTime(), glm::vec3(2.0, 0, 0)); };
+        std::function<void()> forwardMove = [&] { models["backpack"]->Translate(*renderer.GetDeltaTime(), glm::vec3(0, 0, -2.0)); };
+        std::function<void()> backwardMove = [&] { models["backpack"]->Translate(*renderer.GetDeltaTime(), glm::vec3(0, 0, 2.0)); };
+
+        _input->AttachKeyEvent(leftMove, GLFW_KEY_LEFT);
+        _input->AttachKeyEvent(rightMove, GLFW_KEY_RIGHT);
+        _input->AttachKeyEvent(forwardMove, GLFW_KEY_UP);
+        _input->AttachKeyEvent(backwardMove, GLFW_KEY_DOWN);
     }
 
     // Delete copy/move because of reference member
@@ -65,58 +141,39 @@ public:
     Scene &operator=(const Scene &) = delete;
     Scene &operator=(Scene &&) = delete;
 
-    void UpdateOctree(std::string modelName, glm::vec3 deltaMovement)
-    {
-        models.find(modelName)->second->modelUpdated.RaiseEvent(deltaMovement);
-    }
-
-    void DrawModel(glm::mat4 &model, glm::mat4 &view, glm::mat4 &proj, std::string modelName)
-    {
-
-        renderer.UseShader("ModelShader");
-
-        renderer.GetShader("ModelShader")->SetMat4("model", model);
-        renderer.GetShader("ModelShader")->SetMat4("view", view);
-        renderer.GetShader("ModelShader")->SetMat4("projection", proj);
-
-        modelBridges.find(modelName)->second->Draw(*renderer.GetShader("BlockShader"));
-
-        //  Updates models octree based on model matrix, ideally cache this so it isn't updated per frame
-        //models.find(modelName)->second->modelUpdated.RaiseEvent(model);
-
-        if (drawOctrees)
-        {
-            renderer.UseShader("OctreeShader");
-            renderer.GetShader("OctreeShader")->SetMat4("model", model);
-            renderer.GetShader("OctreeShader")->SetMat4("view", view);
-            renderer.GetShader("OctreeShader")->SetMat4("projection", proj);
-
-            if (drawLeafsOnly)
-                modelBridges.find(modelName)->second->DrawOctreeLeafs(*renderer.GetShader("OctreeShader"));
-            else 
-                modelBridges.find(modelName)->second->DrawOctree(*renderer.GetShader("OctreeShader"));
-        }
-    }
-
-    void Draw(glm::mat4 &model, glm::mat4 &view, glm::mat4 &proj)
-    {
-        //  Have a vector of ModelData and draw every single one in here
-        //  Check if any of the models intersect
-    }
-
     void CheckIntersections()
     {
-        auto& nodes = Collision::CheckCollision(models["backpack"]->octree.get(), models["girl"]->octree.get());
-        int i = 0;
+        //  Octrees are messed up for girl
+        auto &nodes = Collision::CheckCollision(models["backpack"].get()->GetOctree(), models["girl"].get()->GetOctree());
+        //modelBlend["backpackgirl"] = nodes;
+
+        //  Not hidden until collision occurs
+        models["backpack"]->SetHidden(false);
+        models["girl"]->SetHidden(false);
         for (auto &node : nodes)
         {
             node.first->onIntersection.RaiseEvent(true);
-            node.second->onIntersection.RaiseEvent(true);        
+            node.second->onIntersection.RaiseEvent(true);
+
+            //  Hide model and then generate new model (MAKE THIS EVENT DRIVEN)
+            //models["backpack"]->SetHidden(true);
+            //models["girl"]->SetHidden(true);
         }
-        /*
-        else
-            std::cout << "NOT COLLIDING \n";
-        */
+    }
+
+    void Update()
+    {
+        //  If objects intersect they will not be drawn
+        for (auto& model : models)
+        {
+            model.second->Draw(renderer);
+        }
+
+        //  If Intersected it will instead draw their blended model
+        for (auto &node : modelBlend["backpackgirl"])
+        {
+            //node->Draw(*renderer.GetShader("BlockShader"));
+        }
     }
 };
 

@@ -16,6 +16,7 @@ private:
 public:
     std::vector<MeshBridge> meshBridges;
     std::vector<std::unique_ptr<OctreeBridge>> octreeBridges;
+    bool hidden = false;
 
     void AttachModel(Model* _model);
     void Draw(IShader& shader);

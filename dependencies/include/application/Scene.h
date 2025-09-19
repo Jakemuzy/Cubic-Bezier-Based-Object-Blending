@@ -51,7 +51,6 @@ public:
 
         //  Updates position data that was already pregenerated from model
         prevPos = glm::vec3(transform[3]);
-        UpdateOctree();
     }
 
     void Translate(float deltaTime, glm::vec3 translation)
@@ -82,6 +81,16 @@ public:
             else
                 modelBridge->DrawOctree(*renderer.GetShader("OctreeShader"));
         }
+    }
+
+    Octree* GetOctree()
+    {
+        return model.get()->octree.get();
+    }
+
+    void SetHidden(bool hiddenState)
+    {
+        modelBridge.get()->hidden = hiddenState;
     }
 };
 
@@ -134,21 +143,21 @@ public:
 
     void CheckIntersections()
     {
-        
-        auto& nodes = Collision::CheckCollision(models["backpack"]->octree.get(), models["girl"]->octree.get());
-        modelBlend["backpackgirl"] = nodes;
+        //  Octrees are messed up for girl
+        auto &nodes = Collision::CheckCollision(models["backpack"].get()->GetOctree(), models["girl"].get()->GetOctree());
+        //modelBlend["backpackgirl"] = nodes;
 
         //  Not hidden until collision occurs
-        modelBridges["backpack"]->hidden = false;
-        modelBridges["girl"]->hidden = false;
+        models["backpack"]->SetHidden(false);
+        models["girl"]->SetHidden(false);
         for (auto &node : nodes)
         {
             node.first->onIntersection.RaiseEvent(true);
             node.second->onIntersection.RaiseEvent(true);
 
             //  Hide model and then generate new model (MAKE THIS EVENT DRIVEN)
-            modelBridges["backpack"]->hidden = true;
-            modelBridges["girl"]->hidden = true;
+            //models["backpack"]->SetHidden(true);
+            //models["girl"]->SetHidden(true);
         }
     }
 

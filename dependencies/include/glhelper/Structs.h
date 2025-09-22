@@ -40,7 +40,4 @@ struct BoundingBox
     glm::vec3 max;
 };
 
-//  
-
-
 #endif 

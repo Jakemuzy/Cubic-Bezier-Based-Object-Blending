@@ -75,6 +75,7 @@
         "map": "cpp",
         "set": "cpp",
         "unordered_set": "cpp",
-        "xtree": "cpp"
+        "xtree": "cpp",
+        "memory_resource": "cpp"
     }
 }

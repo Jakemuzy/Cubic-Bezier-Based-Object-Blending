@@ -76,9 +76,11 @@ public:
             node.first->onIntersection.RaiseEvent(true);
             node.second->onIntersection.RaiseEvent(true);
 
+            modelBlend->onUpdateBlend.RaiseEvent();
+
             //  Hide model and then generate new model (MAKE THIS EVENT DRIVEN)
-            models["backpack"]->SetHidden(true);
-            models["girl"]->SetHidden(true);
+            //models["backpack"]->SetHidden(true);
+            //models["girl"]->SetHidden(true);
         }
     }
 
@@ -93,7 +95,7 @@ public:
         //  If Intersected it will instead draw their blended model
         for (auto &node : CollidingNodes)
         {
-            modelBlend->Draw(renderer);
+            //modelBlend->Draw(renderer);
         }
     }
 };

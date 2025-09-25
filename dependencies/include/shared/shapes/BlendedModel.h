@@ -19,142 +19,24 @@ using LeafPairs = std::vector<LeafPair>;
     the new ones.
 */
 
-//  Project point on closest triangle in order to find barycentric coords and blend
-//  https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-rendering-a-triangle/barycentric-coordinates.html
-void ProjectPointOnTri(Triangle& tri, std::vector<Triangle*> otherTris)
+struct ClosestTriangle
 {
-    ClosestTriangle(tri, otherTris);
+    glm::vec3 pos;
+    glm::vec3 barycentric;
+
+    Triangle* tri;
+    float distance;
+
+    ClosestTriangle() {} 
+    ClosestTriangle(glm::vec3& p, glm::vec3 b, Triangle* t, float d) : pos(p), barycentric(b), tri(t), distance(d) { } 
 };
 
 //  Finds the closest TriangleB to given TriangleA
-Triangle* ClosestTriangle(Triangle& tri, std::vector<Triangle*> otherTris)
-{
-    float closestDist = std::numeric_limits<float>::max();
-    Triangle* closest = nullptr;
+ClosestTriangle FindClosestTriangle(Triangle& tri, std::vector<Triangle>* otherTris);
 
-    for(auto& otherTri : otherTris)
-    {
-        float dist1 = ClosestPointOnTriangle(tri.v0->Position, otherTri);
-        if (dist1 < closestDist)
-        {
-            closestDist = dist1;
-            closest = otherTri;
-        }
-
-        float dist2 = ClosestPointOnTriangle(tri.v1->Position, otherTri);
-        if (dist2 < closestDist)
-        {
-            closestDist = dist2;
-            closest = otherTri;
-        }
-
-        float dist3 = ClosestPointOnTriangle(tri.v2->Position, otherTri);
-        if (dist3 < closestDist)
-        {
-            closestDist = dist3;
-            closest = otherTri;
-        }
-    }
-
-    return closest;
-};
-
-//  Finds the Closest Point on a triangle to a given point and gets the distance 
+//  Finds the Closest Point on a triangle to a given point and returns info about it 
 //  https://gdbooks.gitbooks.io/3dcollisions/content/Chapter4/closest_point_to_triangle.html
-glm::vec3 ClosestPointOnTriangle(const glm::vec3& p, const Triangle* tri)
-{
-    glm::vec3 a = tri->v0->Position;
-    glm::vec3 b = tri->v1->Position;
-    glm::vec3 c = tri->v2->Position;
-
-    //  Edges
-    glm::vec3 ba = b - a;
-    glm::vec3 ca = c - a;
-    glm::vec3 cb = c - b;
-
-    //  Replacements for cross products (cuz expensive)
-    float d1 = glm::dot(b - a, p - a);
-    float d2 = glm::dot(c - a, p - a);
-    float d3 = glm::dot(b - a, p - b);
-    float d4 = glm::dot(c - a, p - b);
-    float d5 = glm::dot(b - a, p - c);
-    float d6 = glm::dot(c - a, p - c);
-
-    float snom = d1;
-    float sdenom = -d3;
-
-    float tnom = d2;
-    float tdenom = -d6;
-
-    //  Vertex region early out
-    if (snom <= 0.0f && tnom <= 0.0f) 
-        return a;
-
-    //  Parametric pos u for projection P' of P on BC
-    float unom = d4 - d3;
-    float udenom = d5 - d6;
-
-    //  Vertex region early out
-    if (sdenom <= 0.0f && unom <= 0.0f)
-        return b; 
-    if (tdenom <= 0.0f && udenom <= 0.0f)
-        return c;
-
-    //  P outside (or on) AB if triple scalar product [N PA PB] <= 0
-    float vc = d1 * d4 - d3 * d2;
-
-    //  P outside AB and within feature region of AB
-    //  return projection of P onto AB
-    if (vc <= 0.0f && snom >= 0.0f && sdenom >= 0.0f)
-        return a + snom / (snom + sdenom) * ba;
-
-    //  P outside (or on) BC if triple scalar product [N PB PC] <= 0
-    float va = d3 * d6 - d5 * d4;
-
-    // P outside BC and within feature region of BC,
-    // return projection of P onto BC
-    if (va <= 0.0f && unom >= 0.0f && udenom >= 0.0f) 
-        return b + unom / (unom + udenom) * cb;
-
-    //  P is outside (or on) CA if the triple scalar product [N PC PA] <= 0
-    float vb = d5 * d2 - d1 * d6;
-    // P outside CA and within feature region of CA,
-    // return projection of P onto CA
-    if (vb <= 0.0f && tnom >= 0.0f && tdenom >= 0.0f)
-        return a + tnom / (tnom + tdenom) * ca;
-
-    // P must project inside face region. Compute Q using barycentric coordinates
-    float u = va / (va + vb + vc);
-    float v = vb / (va + vb + vc);
-    float w = 1.0f - u - v; // = vc / (va + vb + vc)
-
-    //  We only need the barycentric coordinates
-    //return u * a + v * b + w * c;
-    return glm::vec3(u, v, w);
-};
-
-glm::vec3 ClosestVertexOnTri(const glm::vec3 &p, const Triangle* tri)
-{
-    //  Vectors pointing from each vertex to point
-    glm::vec3 edge1 = p - tri->v0->Position;
-    glm::vec3 edge2 = p - tri->v1->Position;
-    glm::vec3 edge3 = p - tri->v2->Position;
-
-    //  Distances
-    float dist1 = edge1.length();
-    float dist2 = edge2.length();
-    float dist3 = edge3.length();
-
-    //  Shortest length
-    float min = (dist1 < dist2 ? dist1 : dist2);
-    min = min < dist3 ? min : dist3;
-
-    if (min == dist1)
-        return tri->v0;
-    else if (min == dist2)
-        return tri->v1;
-    return tri->v2;
-}
+ClosestTriangle ClosestPointOnTriangle(const glm::vec3& p, Triangle& tri);
 
 class BlendedModel
 {
@@ -166,27 +48,58 @@ private:
 
     Model modelBlend;
     ModelBridge modelBlendBridge;
+    
+    float blendFactor = 0.5f;
+    glm::vec3 prevPosMA, prevPosMB;
 
     std::unique_ptr<Octree> octree = nullptr;
-    Event<void()> onUpdateBlend;
 
 public:
+    Event<> onUpdateBlend;
+
     BlendedModel() = default;
 
-    //  Instead of Model this should be ModelData
-    BlendedModel(ModelData* a, ModelData* b, LeafPairs& lp) : modelA(a), modelB(b), CollidingNodes(&lp) { }
+    BlendedModel(ModelData* a, ModelData* b, LeafPairs& lp) : modelA(a), modelB(b), CollidingNodes(&lp) 
+    { 
+        prevPosMA = a->transform[3];
+        prevPosMB = b->transform[3];
+
+        //  Only update the model IF the model has moved enough distance
+        onUpdateBlend.Subscribe([&] {
+            glm::vec3 newA = a->transform[3];;
+            if (glm::length(newA - prevPosMA) > 0.1f)
+            {
+                prevPosMA = newA;
+                UpdateBlend();
+            }
+        });
+    }
 
     //  For each node that intersects in the octree, get all the vertices in the node,
     //  https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-rendering-a-triangle/barycentric-coordinates.html
     //  https://www.r-5.org/files/books/computers/algo-list/realtime-3d/Christer_Ericson-Real-Time_Collision_Detection-EN.pdf 
     void UpdateBlend()
     {
+
+        ClosestTriangle tri;
+
+        for(auto& pair : *CollidingNodes)
+        {
+            pair.first->triangles;
+            for (auto& nodeOneTri : *(pair.first->triangles))
+            {
+                ClosestTriangle closest = FindClosestTriangle(nodeOneTri, pair.second->triangles);
+                
+                glm::vec3 currentBlend = glm::mix(nodeOneTri.v0->Position, closest.barycentric.x * closest.tri->v0->Position +
+                                                   closest.barycentric.y * closest.tri->v1->Position +
+                                                   closest.barycentric.z * closest.tri->v2->Position, blendFactor);
+            }
+        }
+
+
         /*
-        Iterate octrees of both models at the same time
-
-        compare to see if any leafpair memory address == the models memory address
-        if they do match, then blend the nearest vertices
-
+                
+        /*
         MATCH FOUND
             If a match is found, iterate through all triangles in LeafA, finding the nearest neighbor triangle in LeafB
             Once this nearest neighbor is found, project all vertices in TriA onto TriB

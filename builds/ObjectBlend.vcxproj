@@ -317,6 +317,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\src\BlendedModel.cpp" />
     <ClCompile Include="C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\src\Camera.cpp" />
     <ClCompile Include="C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\src\InputHandler.cpp" />
     <ClCompile Include="C:\Users\jmuzy\OneDrive\Desktop\Projects\Object Blending\src\Mesh.cpp" />

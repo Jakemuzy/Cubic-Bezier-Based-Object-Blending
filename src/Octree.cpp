@@ -1,6 +1,6 @@
 #include "shapes/Octree.h"
 
-Node::Node(BoundingBox _bounds, int _currentDepth, std::vector<Triangle> &_triangles) : bounds(_bounds), currentDepth(_currentDepth), triangles(&_triangles)
+Node::Node(BoundingBox _bounds, int _currentDepth, std::vector<Triangle> _triangles) : bounds(_bounds), currentDepth(_currentDepth), triangles(std::move(_triangles))
 {
     DetermineChildren();
 }
@@ -31,9 +31,9 @@ void Node::DetermineChildren()
     for (auto &box : subBoxes)
     {
         std::vector<Triangle> trisInNode;
-        for (auto &tri : *triangles)
+        for (auto &tri : triangles)
         {
-            if (SAT(bounds, tri))
+            if (SAT(box, tri))
                 trisInNode.push_back(tri);
         }
 

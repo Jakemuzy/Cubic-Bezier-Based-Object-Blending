@@ -93,10 +93,7 @@ public:
         }
 
         //  If Intersected it will instead draw their blended model
-        for (auto &node : CollidingNodes)
-        {
-            //modelBlend->Draw(renderer);
-        }
+        modelBlend->Draw();
     }
 };
 

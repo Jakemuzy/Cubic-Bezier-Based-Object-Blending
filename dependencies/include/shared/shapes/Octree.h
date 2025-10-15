@@ -27,14 +27,14 @@ private:
 public:
     //  Bounds in world space, verticies in local
     BoundingBox bounds;
-    std::vector<Triangle>* triangles;
+    std::vector<Triangle> triangles;
 
     Event<bool> onIntersection;
     int currentDepth = 1;
 
 
     Node() = default;
-    Node(BoundingBox _bounds, int _currentDepth, std::vector<Triangle>& _triangles);
+    Node(BoundingBox _bounds, int _currentDepth, std::vector<Triangle> _triangles);
 
     void DetermineChildren();
     std::vector<std::shared_ptr<Node>>& GetChildren() { return children; }

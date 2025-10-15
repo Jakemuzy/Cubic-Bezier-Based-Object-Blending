@@ -1,12 +1,12 @@
 #include "shapes/BlendedModel.h"
 
 //  Finds the closest TriangleB to given TriangleA
-ClosestTriangle FindClosestTriangle(Triangle &tri, std::vector<Triangle> *otherTris)
+ClosestTriangle FindClosestTriangle(Triangle &tri, std::vector<Triangle> &otherTris)
 {
     float closestDist = std::numeric_limits<float>::max();
     ClosestTriangle closest;
 
-    for (auto &otherTri : *otherTris)
+    for (auto &otherTri : otherTris)
     {
         ClosestTriangle tri1 = ClosestPointOnTriangle(tri.v0->Position, otherTri);
         if (tri1.distance < closestDist)
